@@ -1,0 +1,21 @@
+{
+    "name": "staticfile",
+    "authors": [
+      "IGeekFan"
+    ],
+    "description": "集成基础类库",
+    "main": "index.js",
+    "keywords": [
+      "基础类库"
+    ],
+    "license": "MIT",
+    "homepage": "http://218.94.144.229:10101/summary/libs%2Fstaticfiles.git",
+    "private": true,
+    "ignore": [
+      "**/.*",
+      "node_modules",
+      "bower_components",
+      "test",
+      "tests"
+    ]
+  }
