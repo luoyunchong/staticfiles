@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link rel="stylesheet" href="/plugins/jQuery-EasyUI-insdep/reset.min.css">
+    <link rel="stylesheet" href="/plugins/jQuery-EasyUI-insdep/easyui_full.css">
+    <link rel="stylesheet" href="/plugins/jQuery-EasyUI-insdep/icon.css">
+
+    <script src="/plugins/jquery/dist/jquery.min.js"></script>
+
+    <script src="/plugins/jQuery-EasyUI-insdep/jquery.easyui-1.5.2.min.js"></script>
+    <script src="/plugins/jQuery-EasyUI-insdep/locale/easyui-lang-zh_CN.js"></script>
+    <script src="/plugins/jQuery-EasyUI-insdep/insdep-extend.js"></script>
+
+    <script src="/plugins/webuploader/dist/webuploader.min.js"></script>
+
+    
+    <link rel="stylesheet" href="/plugins/webuploader/webuploader.css">
+    <link rel="stylesheet" href="/plugins/font-awesome/css/font-awesome.min.css">
+    
+    <script src="/plugins/layer/dist/layer.js"></script>
+
+    <script src="/libs/abp.js"></script>
+    <script src="/libs/abp.jquery.js"></script>
+    <!-- <script src="/libs/abp.layui-alert.js"></script> -->
+
+    <script src="/ProjectLib/base.js"></script>
+    <script src="/libs/abp.easyui-alert.js"></script>
+    
+    <script>
+        window.applicationPath="/plugins/webuploader";  
+    </script>
+    <script src="/libs/abp.webuploader.js"></script>
+
+    <script>
+          $(function () {
+            //实例化文件上传，webuploader的属性都可以使用
+            $("#uploadfile").powerWebUpload({
+                fileNumLimit: 2,
+                auto: false
+            });
+
+            //编辑时编辑值
+            webuploader.loadFile({
+                elem: '#uploadfile',
+                rows: [{
+                    Id: 1,
+                    FileName: '-1d2fab5b7544b288.jpg',
+                    FileToken: '9a92df63-24fc-4592-968c-efcf70cea290.jpg',
+                    FileSize: '2333'
+                }]
+            });
+
+            //查看页面，只需要调用 这个方法即可，isCheck为true时为查看页面，没有删除按钮
+            webuploader.loadFile({
+                elem: '#check',
+                isCheck:true,
+                rows: [{
+                    Id: 1,
+                    FileName: '-1d2fab5b7544b288.jpg',
+                    FileToken: '9a92df63-24fc-4592-968c-efcf70cea290.jpg',
+                    FileSize: '2333'
+                }]
+            });
+        });
+        //如何获取上传文件的地址  ，多文件上传时，文件名最后以*分割     9a92df63-24fc-4592-968c-efcf70cea290.jpg*9a92df63-24fc-4592-968c-efcf70cea290.jpg  
+        function getFiles() {
+            var data = $("#uploadfile").GetFilesAddress();
+            return data;
+        }
+    </script>
+</head>
+<body>
+    <form class="form-horizontal">
+        <label for="" class="">附件：</label>
+        <div id="uploadfile"></div>
+        <br />
+        <label for="" class="">查看页面：</label>
+        <div id="check"></div>
+    </form>
+</body>
+</html>
