@@ -1,0 +1,157 @@
+.btns { float: left; }
+
+.uploader-list { display: flex; flex-wrap: wrap; }
+    .uploader-list .item:hover { background-color: #ffe48d; }
+    .uploader-list .item { margin: 0 6px 6px 6px; height: 58px; width: 340px; min-width: 340px; background-color: #f3f3f3; border-radius: 5px; }
+
+.uploaderPic .statusBar .btns { position: absolute; top: 10px; right: 20px; line-height: 40px; }
+
+.webuploader-element-invisible { position: absolute !important; clip: rect(1px 1px 1px 1px); }
+.webuploader-pick { position: relative; display: inline-block; cursor: pointer; border-color: #2e6da4; background: #337ab7; padding: 6px 9px; color: #fff; text-align: center; border-radius: 3px; overflow: hidden; }
+.webuploader-pick-hover { background-color: #286090; border-color: #204d74; }
+.webuploadbtn { -moz-box-shadow: inset 0px 1px 0px 0px #ffffff; -webkit-box-shadow: inset 0px 1px 0px 0px #ffffff; box-shadow: inset 0px 1px 0px 0px #ffffff; background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f9f9f9), color-stop(1, #e9e9e9)); background: -moz-linear-gradient(top, #f9f9f9 5%, #e9e9e9 100%); background: -webkit-linear-gradient(top, #f9f9f9 5%, #e9e9e9 100%); background: -o-linear-gradient(top, #f9f9f9 5%, #e9e9e9 100%); background: -ms-linear-gradient(top, #f9f9f9 5%, #e9e9e9 100%); background: linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9f9f9', endColorstr='#e9e9e9',GradientType=0); background-color: #f9f9f9; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; border: 1px solid #dcdcdc; display: inline-block; cursor: pointer; color: #666666; font-weight: bold; padding: 5px 5px; text-decoration: none; text-shadow: 0px 1px 0px #ffffff; }
+    .webuploadbtn:hover { background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #e9e9e9), color-stop(1, #f9f9f9)); background: -moz-linear-gradient(top, #e9e9e9 5%, #f9f9f9 100%); background: -webkit-linear-gradient(top, #e9e9e9 5%, #f9f9f9 100%); background: -o-linear-gradient(top, #e9e9e9 5%, #f9f9f9 100%); background: -ms-linear-gradient(top, #e9e9e9 5%, #f9f9f9 100%); background: linear-gradient(to bottom, #e9e9e9 5%, #f9f9f9 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e9e9e9', endColorstr='#f9f9f9',GradientType=0); background-color: #e9e9e9; }
+    .webuploadbtn:active { position: relative; top: 1px; }
+
+
+.uploader-list .webuploadinfo .webupload-button a { text-decoration: none; color: #0F6099; padding: 2px 4px 4px; }
+
+    .uploader-list .webuploadinfo .webupload-button a:hover,
+    .uploader-list .webuploadinfo .webupload-button a:active { background-color: #0F6099 !important; color: #fff !important; border-radius: 3px; }
+
+.uploader-list .item a:hover { text-decoration: none; }
+
+.uploader-list .webuploadinfo { line-height: 24px; font-size: 12px; color: #666666; }
+
+.uploader-list .webupload-button { float: right; margin-right: 6px; }
+
+.uploader-list .webuploadstate { font-size: 14px; color: #b0b0b0; }
+    .uploader-list .webuploadstate .progressbar-animation { width: 270px; margin-top: 3px; }
+    .uploader-list .webuploadstate .webupload-text { font-family: "Microsoft YaHei" !important; font-size: 12px; color: #3d882d; }
+
+/*图片上传*/
+.webupload-list-img { margin: 0 4px 6px 6px; display: inline-block; width: 60px; height: 60px; text-align: center; line-height: 60px; border: 1px solid transparent; border-radius: 4px; overflow: hidden; background: #fff; position: relative; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); }
+    .webupload-list-img img { width: 100%; height: 100%; }
+.webupload-list-img-cover { display: none; position: absolute; top: 0; bottom: 0; left: 0; right: 0; background: rgba(0, 0, 0, 0.6); }
+    .webupload-list-img-cover i { color: #fff; font-size: 20px; cursor: pointer; margin: 0 2px; }
+.webupload-list-img:hover .webupload-list-img-cover { display: block; }
+
+
+.nui-ico { height: 32px; width: 32px; float: left; margin: 12px; zoom: 1; vertical-align: middle; }
+
+.nui-ico-file32 { width: 32px; height: 32px; background-image: url(./img/fileico_v5.png); }
+
+.nui-ico-file32,
+.nui-ico-file32-1 { background-position: /*0 -64px;默认为白色*/ -672px -64px; /*文本*/ }
+
+.nui-ico-file32-xls,
+.nui-ico-file32-xlsx,
+.nui-ico-file32-2 { background-position: -32px -64px; }
+
+.nui-ico-file32-doc,
+.nui-ico-file32-docx,
+.nui-ico-file32-3 { background-position: -64px -64px; }
+
+.nui-ico-file32-ppt,
+.nui-ico-file32-pptx,
+.nui-ico-file32-4 { background-position: -96px -64px; }
+
+.nui-ico-file32-5 { background-position: -128px -64px; }
+
+.nui-ico-file32-rar,
+.nui-ico-file32-6 { background-position: -160px -64px; }
+
+.nui-ico-file32-zip,
+.nui-ico-file32-7 { background-position: -192px -64px; }
+
+.nui-ico-file32-8 { background-position: -224px -64px; }
+
+.nui-ico-file32-9 { background-position: -256px -64px; }
+
+.nui-ico-file32-html,
+.nui-ico-file32-10 { background-position: -288px -64px; }
+
+.nui-ico-file32-js,
+.nui-ico-file32-11 { background-position: -320px -64px; }
+
+.nui-ico-file32-css,
+.nui-ico-file32-12 { background-position: -352px -64px; }
+
+.nui-ico-file32-13 { background-position: -384px -64px; }
+
+.nui-ico-file32-14 { background-position: -416px -64px; }
+
+.nui-ico-file32-15 { background-position: -448px -64px; }
+
+.nui-ico-file32-16 { background-position: -480px -64px; }
+
+.nui-ico-file32-pdf,
+.nui-ico-file32-17 { background-position: -512px -64px; }
+
+.nui-ico-file32-ps,
+.nui-ico-file32-18 { background-position: -544px -64px; }
+
+.nui-ico-file32-19 { background-position: -576px -64px; }
+
+.nui-ico-file32-20 { background-position: -608px -64px; }
+
+.nui-ico-file32-21 { background-position: -640px -64px; }
+
+.nui-ico-file32-txt,
+.nui-ico-file32-22 { background-position: -672px -64px; }
+
+.nui-ico-file32-23 { background-position: -704px -64px; }
+
+.nui-ico-file32-24 { background-position: -736px -64px; }
+
+.nui-ico-file32-25 { background-position: -768px -64px; }
+
+.nui-ico-file32-26 { background-position: -800px -64px; }
+
+.nui-ico-file32-27 { background-position: -832px -64px; }
+
+.nui-ico-file32-28 { background-position: -864px -64px; }
+
+.nui-ico-file32-29 { background-position: -896px -64px; }
+
+.nui-ico-file32-jpg,
+.nui-ico-file32-31 { background-position: 0 -96px; }
+
+.nui-ico-file32-gif,
+.nui-ico-file32-32 { background-position: -32px -96px; }
+
+.nui-ico-file32-png,
+.nui-ico-file32-33 { background-position: -64px -96px; }
+
+.nui-ico-file32-bmp,
+.nui-ico-file32-34 { background-position: -96px -96px; }
+
+.nui-ico-file32-tif,
+.nui-ico-file32-35 { background-position: -128px -96px; }
+
+.nui-ico-file32-emf,
+.nui-ico-file32-36 { background-position: -160px -96px; }
+
+.nui-ico-file32-yi,
+.nui-ico-file32-37 { background-position: -192px -96px; }
+
+.nui-ico-file32-ico,
+.nui-ico-file32-38 { background-position: -224px -96px; }
+
+.nui-ico-file32-39 { background-position: -256px -96px; }
+
+.nui-ico-file32-40 { background-position: -288px -96px; }
+
+.nui-ico-file32-41 { background-position: -320px -96px; }
+
+.nui-ico-file32-42 { background-position: -352px -96px; }
+
+.nui-ico-file32-43 { background-position: -384px -96px; }
+
+.nui-ico-file32-44 { background-position: -416px -96px; }
+
+.nui-ico-file32-45 { background-position: -448px -96px; }
+
+.nui-ico-file32-46 { background-position: -480px -96px; }
+
+.nui-ico-file32-dir { background-position: -384px -96px; }
