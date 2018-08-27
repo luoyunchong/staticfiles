@@ -16,7 +16,7 @@ var abp = abp || {};
 */
 (function ($, window) {
     var applicationPath = window.applicationPath === "" ? "" : window.applicationPath || "/bower_components/webuploader/dist";
-    var serviceUrl="http://localhost:61816"
+    var serviceUrl = "http://localhost:61816"
     function initWebUpload(item, options) {
 
         if (!WebUploader.Uploader.support()) {
@@ -89,8 +89,8 @@ var abp = abp || {};
             // swf文件路径
             swf: applicationPath + '/Uploader.swf',
             // 文件接收服务端。
-            server:serviceUrl+ '/File/UploadFile',
-            deleteServer:serviceUrl+ '/File/Delete',
+            server: serviceUrl + '/File/UploadFile',
+            deleteServer: serviceUrl + '/File/Delete',
             // 选择文件的按钮。可选。
             // 内部根据当前运行是创建，可能是input元素，也可能是flash.
             pick: '#' + pickerid,
@@ -99,7 +99,9 @@ var abp = abp || {};
             fileNumLimit: opts.fileNumLimit,
             fileSizeLimit: opts.fileSizeLimit,
             fileSingleSizeLimit: opts.fileSingleSizeLimit,
-            accept: opts.accept
+            accept: opts.accept,
+            withCredentials:true
+
         }, opts.innerOptions);
 
         uploader = WebUploader.create(webuploaderoptions);
@@ -251,12 +253,12 @@ var abp = abp || {};
                         var limit = webuploader.bytesToSize(file.size);
                         target.find('#' + $fileId).find('div.webuploadstate .webupload-text').html(limit + ' 上传成功');
 
-                        var downUrl = serviceUrl+'/File/Download?fileToken=' + response.result + '&newName=' + file.name;
+                        var downUrl = serviceUrl + '/File/Download?fileToken=' + response.result + '&newName=' + file.name;
 
                         target.find('#' + $fileId).find('div.webuploadinfo .webupload-button a')
-                            .after('<a href="' +downUrl +'" target="_blank"><span  class="webupload-download">下载</span></a>');
+                            .after('<a href="' + downUrl + '" target="_blank"><span  class="webupload-download">下载</span></a>');
 
-                        $hiddenInput.append('<input type="text" id="hiddenInput' +$fileId +'" class="hiddenInput" value="' +response.result +'" />');
+                        $hiddenInput.append('<input type="text" id="hiddenInput' + $fileId + '" class="hiddenInput" value="' + response.result + '" />');
                     }
                 } else {
                     if (response.success === false) {
@@ -264,13 +266,8 @@ var abp = abp || {};
                         abp.message.error(response.error.message);
                     } else {
                         window.setTimeout(function () {
-                            target.find('#' + $fileId + ' img')
-                                .attr('src',serviceUrl+ '/File/Download?fileToken=' + response.result);
-
-                            target.find('#' +
-                                $fileId +
-                                ' .webupload-list-img-cover .img-upload-state span.file-token')
-                                .data('filetoken', response.result);
+                            target.find('#' + $fileId + ' img').attr('src', serviceUrl + '/File/Download?fileToken=' + response.result);
+                            target.find('#' + $fileId + ' .webupload-list-img-cover .img-upload-state span.file-token').attr('data-filetoken', response.result);
                         },
                             500);
                     }
@@ -319,11 +316,21 @@ var abp = abp || {};
                 }
             });
 
-        var deleteFile = function (fileToken) {
+        var deleteFile = function (fileToken, callback) {
             if (!webuploader.isNullOrEmpty(fileToken)) {
                 $.post(webuploaderoptions.deleteServer,
                     { fileToken: fileToken },
                     function (data) {
+                        if (data.Succeed == 0 && data.Message == "该文件不存在!") {
+                            abp.message.warn(data.Message);
+                            callback && callback();
+                            return;
+                        }
+                        if (data.Succeed == 0) {
+                            abp.message.warn(data.Message);
+                        } else {
+                            callback && callback();
+                        }
                         //console.info("删除成功:" + data);
                     });
             }
@@ -335,28 +342,25 @@ var abp = abp || {};
                 var fileId = $(item)[0].id + file.id;
                 if (target.data('uploadType') === 'file') {
                     fileToken = target.find("#hiddenInput" + fileId).val();
-                    $("#hiddenInput" + fileId).remove();
-
-                    target.find("#" + fileId).fadeOut(500,
-                        function () {
-                            $(this).remove();
-                        });
                 } else {
-                    fileToken = target.find(fileId + ' .webupload-list-img-cover .img-upload-state span.file-token')
-                        .data('filetoken');
+                    fileToken = target.find('#' + fileId + ' .webupload-list-img-cover .img-upload-state span.file-token').attr('data-filetoken');
+                }
+                deleteFile(fileToken, function () {
+                    if (target.data('uploadType') === 'file') {
+                        $("#hiddenInput " + fileId).remove();
+                    }
 
                     target.find("#" + fileId).hide(500,
                         function () {
                             $(this).remove();
                         });
-                }
-                deleteFile(fileToken);
+                });
 
             });
 
-        uploader.on('uploadBeforeSend',function(object,data,headers){
-            $.extend(headers,{
-                "Authorization":"Bearer MRuljso5KutlmWxh2GmOr3-CQewO0nvmo-66M3Y19l8IxopmF6AAjiNa8ck6zj2GTIT_A4xoCQeDSwhJc-CdmHlOGP6kSAxas9OusvCFekXPu3Wj7Moxd0huNkrC8ZGszpw6G8GXilnmlHAEkDTKjuR5m54XY2KBNr9WoFYcExTUmfzgXSIhy71g15F37Rvxs_kwv5qCAM3dzFziXFOrZr3sjY29FhFTWIBvZeEbOAc9OxAEb-NwskHuzFvJQWGgSKVd5UNsL3Pe-Jje1NnCk_aBoE9YilJthVsb7N7J2IR4a1XkHNjzLyaSsigc68BiC832STlojeOwZWekdJ70bnV1wKwbhgswqjsNAfGLIxPPPm-gskcBUu9drrASsDAn7-NMkjeNc1skIad2EwIwbJVElVp7gpAQf6PDYxqg12IS0fvof33XsAzPX7YXeEx7cX2hoeid8L3P-f3H-4p0W9Dg-SpFq5uVD03td6nu4Js"
+        uploader.on('uploadBeforeSend', function (object, data, headers) {
+            $.extend(headers, {
+                "Authorization": "Bearer ELOnVLY43A-HVWlHAofBQlWhMbfAZEXq3p-4l-F4YUtkLiOZzAC3PPXcvXJx5mjOBLoERnftc5-dRMp4iKDfOoNDvyei8Av_rg3MsSk2dnv4zQZOqjjFIib2WT_yLh2kRhFWREeETYrdNOsUWOvRgsB866QI_nxR27_TZZfwpCEO2AQvDZ4PZs5pPE6J3LWvoAsryrYkCQN3nxJios0AqDnBpcC8wwlyBUyIobY4lhpTsqrIIps94ssHPufyt_GmjTPTiqYQgtx7-f5Wb3F1LztHw_hJoTGKOxYO3QDbjekWZ_idUHcFK43YJu3MrEF88tZoT1lLDRYNDQdPQtZL_WkJc1PsbTCITGNFv8yIE1kreImIQ_ngf6sAVQ0oYE4cQSunghFIS0IER5ti__7lYZpEGx4IEYGlciUqbAV0wXvU7__He7wGoqGAnJzaHewJifkH7LjJvtNhuL-47ey_S0QNCnStyMjTyFhao0h3X9Szsvkr-ZXk1u2W-MW7adYoVJEP9tRLKC-j6BDJKLHo6w"
             });
         });
         //多文件点击上传的方法
@@ -379,6 +383,7 @@ var abp = abp || {};
 
                     var fileId = id.replace($(item)[0].id, "");
                     var file = uploader.getFile(fileId);
+
                     if (file == undefined) {
                         //前台直接删除
                         $('#' + id).fadeOut(500,
@@ -402,14 +407,16 @@ var abp = abp || {};
                     var id = $ele.attr("data-id");
                     var fileId = id.replace($(item)[0].id, "");
                     var file = uploader.getFile(fileId);
+
                     if (file == undefined) {
                         //前台直接删除
                         var filetoken = $ele.next().find('.file-token').data('filetoken');
-                        $('#' + id).hide(500,
-                            function () {
-                                $(this).remove();
-                            });
-                        deleteFile(filetoken);
+                        deleteFile(filetoken, function () {
+                            $('#' + id).hide(500,
+                                function () {
+                                    $(this).remove();
+                                });
+                        });
                     } else {
                         uploader.removeFile(file);
                     }
@@ -466,7 +473,7 @@ var abp = abp || {};
          * 动态加载webuploader控件
          * @param {any} callback
          */
-        getWebUpload:function(callback) {
+        getWebUpload: function (callback) {
             if (typeof WebUploader == 'undefined') {
                 var casspath = applicationPath + "/webuploader.css";
                 $("<link>").attr({ rel: "stylesheet", type: "text/css", href: casspath }).appendTo("head");
@@ -495,7 +502,7 @@ var abp = abp || {};
             if (!isCheck) {
                 template += '<a><span class="webupload-delete" data-id="BinduploadflieWU_FILE_{0}">删除</span></a>';
             }
-            template += '<a href="'+serviceUrl+'/File/Download?fileToken={4}&newName={2}" target="_blank"><span class="webupload-download">下载</span></a>' +
+            template += '<a href="' + serviceUrl + '/File/Download?fileToken={4}&newName={2}" target="_blank"><span class="webupload-download">下载</span></a>' +
                 '</div>' +
                 '<div class="webuploadstate"><span class="weebupload-text">{5}</span></div>' +
                 '</div></div>';
@@ -508,13 +515,13 @@ var abp = abp || {};
          */
         templateImg: function (isCheck) {
             var template = '<div id="BinduploadflieWU_FILE_{0}" class="webupload-list-img">' +
-                '<img src="'+serviceUrl+'/File/Download?fileToken={1}">' +
+                '<img src="' + serviceUrl + '/File/Download?fileToken={1}">' +
                 '<div class="webupload-list-img-cover">' +
                 '<i class="fa fa-eye img-show" title="预览" data-id="BinduploadflieWU_FILE_{0}"></i>';
             if (!isCheck) {
                 template += '<i class="fa fa-remove img-delete" title="删除" data-id="BinduploadflieWU_FILE_{0}"></i>';
             }
-            template += '<div class="img-upload-state" style="display:none;"><span class="file-name" data-filename="{2}"></span><span class="file-token" data-filetoken="{1}"></span></div>' +
+            template += '<div class="img-upload-state" style="display:none;"><span class="file-name" data-filename="{1}"></span><span class="file-token" data-filetoken="{2}"></span></div>' +
                 '</div>' +
                 '</div>';
             return template;
@@ -583,7 +590,7 @@ var abp = abp || {};
                                 html += webuploader.format(webuploader.template(options.isCheck), v.Id, ext, v.FileName, subName, v.FileToken, limit + "上传成功");
                                 $hiddenInput.append('<input type="text" id="hiddenInput' + v.Id + '" class="hiddenInput" value="' + v.FileToken + '" />');
                             } else {
-                                html += webuploader.format(webuploader.templateImg(options.isCheck), v.Id, v.FileToken, v.FileName);
+                                html += webuploader.format(webuploader.templateImg(options.isCheck), v.Id, v.FileName, v.FileToken);
                             }
                         });
 

@@ -646,7 +646,7 @@ $.extend(com, {
             },
             nofind: function (img) {
                 img.src = "/Content/images/user.png";
-                img.onerror = null; //如果错误图片也不存在就会死循环一直跳，所以要设置成null，也可以不加
+                img.onerror = null; //如果错误图片也不存在就会死循环一直跳
             },
             loadSwithButton: function (pDialog, data) {
                 var switchArray = pDialog.find('#editForm').find('input.easyui-switchbutton.switchbutton-f');
@@ -836,22 +836,6 @@ $.extend(com, {
                     }
                 });
             },
-            /**
-             * 判断val是否是手机号
-             * @param {string} val 手机号 
-             * @returns {boolean} true/false 是手机号:true;不是正确的手机号:false 
-             */
-            isPhone: function (val) {
-                if (val === '' || val == undefined) return false;
-                //手机号正则  
-                var phoneReg = /^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$/;
-                //电话  
-                var phone = $.trim(val);
-                if (!phoneReg.test(phone)) {
-                    return false;
-                }
-                return true;
-            },
             openPostWindow: function (url, formData) {
 
                 var tempForm = document.createElement("form");
@@ -934,9 +918,18 @@ $.extend(com, {
             accept: {
                 excel: {
                     title: 'excel',
-                    extensions: 'xls,xlsx',
-                    mimeTypes:
-                        'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    extensions: 'xls,xlsx,csv',
+                    mimeTypes: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.csv'
+                },
+                txt: {
+                    title: 'txt',
+                    extensions: 'txt',
+                    mimeTypes: 'text/plain'
+                },
+                spss: {
+                    title: 'spss',
+                    extensions: 'sav',
+                    mimeTypes: '.sav'
                 }
             },
             enumsToCombox: function (data) {
@@ -952,6 +945,79 @@ $.extend(com, {
             },
             guid: {
                 empty: "00000000-0000-0000-0000-000000000000"
+            },
+            exportExcel: function (elemId, newName) {
+                if (newName == undefined) {
+                    newName = com.uuid();
+                }
+                $(elemId).table2excel({
+                    name: newName,
+                    exclude: '.noExl',
+                    filename: newName,
+                    exclude_img: true,
+                    exclude_links: true,
+                    exclude_inputs: true
+                });
+            },
+            exportWord: function (tableId, newFileName) {
+                var style = '<style>table{ width:100%;text-align:center;}\
+                table, th, td\
+                {\
+                    border: 1px solid blue;\
+                }\
+                table\
+                {\
+                    border-collapse: collapse;\
+                }\
+                table, th, td\
+                {\
+                    border: 1px solid black;\
+                }' +
+                    '.layui-layer-content { padding: 30px; }\
+                    .table > thead: first-child > tr: first-child > td { border-top: 1px solid #d0d0d0; border-bottom: 1px solid #d0d0d0; }\
+                .table > tbody > tr > td, .table > thead > tr > td { padding: 12px; border-left: 1px solid #d0d0d0; border-top: 1px solid #d0d0d0; }\
+                .table: last-child { border-left: none; border-right: 1px solid #d0d0d0; }\
+                .table > tbody > tr.border-bottom > td { border-bottom: 1px solid #d0d0d0; }\
+                .table > thead > tr { background-color: #d4ebf1; font-weight: bold; }\
+                .table-head { padding-right: 17px; color: #000; }\
+                .table-body { width: 100%; height: 394px;}\
+                .table-head table, .table-body table { width: 100 %; }</style> ';
+                var o = $(tableId)[0].outerHTML;
+                var tempRows = "";
+                $(o).find("tr").not('.noExl').each(function (i, p) {
+                    tempRows += "<tr>";
+                    $(p).find("td,th").not('.noExl').each(function (i, q) {
+                        var rc = {
+                            rows: $(this).attr("rowspan"),
+                            cols: $(this).attr("colspan"),
+                            flag: $(q).find('.noExl')
+                        };
+
+                        if (rc.flag.length > 0) {
+                            tempRows += "<td> </td>"; // exclude it!!
+                        } else {
+                            if (rc.rows & rc.cols) {
+                                tempRows += "<td>" + $(q).html() + "</td>";
+                            } else {
+                                tempRows += "<td";
+                                if (rc.rows > 0) {
+                                    tempRows += " rowspan=\'" + rc.rows + "\' ";
+                                }
+                                if (rc.cols > 0) {
+                                    tempRows += " colspan=\'" + rc.cols + "\' ";
+                                }
+                                tempRows += "/>" + $(q).html() + "</td>";
+                            }
+                        }
+                    });
+                    tempRows += "</tr>";
+                });
+
+                com.openPostWindow('/File/ExportDoc',
+                    {
+                        tableHtml: style + "<table>" + tempRows+"</table>",
+                        newFileName: newFileName
+                    });
             }
         });
 })();

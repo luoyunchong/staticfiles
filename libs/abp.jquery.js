@@ -27,9 +27,14 @@
         options.error = undefined;
 
         if (options.showLoading === true && $.messager) {
-            $.messager.progress({
-                text: '加载中....'
-            });
+            if (options.loadingMsg == '') {
+                $.messager.progress();
+            } else {
+                $.messager.progress({
+                    title:'加载中...',
+                    text: options.loadingMsg
+                });
+            }
         }
 
         return $.Deferred(function ($dfd) {
@@ -70,6 +75,7 @@
                 'X-Requested-With': 'XMLHttpRequest'
             },
             showMsg: false,
+            loadingMsg:'',
             showLoading: true
         },
 
@@ -98,7 +104,6 @@
         },
 
         showError: function (error) {
-            //周慧博 2018-03-12 加上注释
             if (!$.array.isNullOrEmpty(error.validationErrors)) {
                 var errorMsg = "";
                 $.each(error.validationErrors, function (i, v) {

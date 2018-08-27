@@ -167,7 +167,7 @@
         return true;
     };
 
-    abp.auth.tokenCookieName = 'Abp.AuthToken.CargoDockingPlatform';
+    abp.auth.tokenCookieName = 'Abp.AuthToken.'+abp.projectName;
 
     abp.auth.setToken = function (authToken, expireDate) {
         abp.utils.setCookieValue(abp.auth.tokenCookieName, authToken, expireDate, abp.appPath, abp.domain);
@@ -908,8 +908,8 @@
     abp.security = abp.security || {};
     abp.security.antiForgery = abp.security.antiForgery || {};
 
-    abp.security.antiForgery.tokenCookieName = 'XSRF-TOKEN-CargoDockingPlatform';
-    abp.security.antiForgery.tokenHeaderName = 'X-XSRF-TOKEN-CargoDockingPlatform';
+    abp.security.antiForgery.tokenCookieName = 'XSRF-TOKEN-'+abp.projectName;
+    abp.security.antiForgery.tokenHeaderName = 'X-XSRF-TOKEN-'+abp.projectName;
 
     abp.security.antiForgery.getToken = function () {
         return abp.utils.getCookieValue(abp.security.antiForgery.tokenCookieName);

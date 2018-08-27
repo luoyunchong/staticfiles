@@ -70,6 +70,19 @@
         return showMessage('error', message, title);
     };
 
+    abp.message.show=function(message, title) {
+        if (!title) {
+            title = '系统提示';
+        }
+        // 消息将显示在顶部中间
+        $.messager.show({
+            title:title,
+            msg:message,
+            showType:'slide'
+        });
+
+    }
+
     abp.imagePreviewDialog = function (imgSrc) {
     
         var html = '<div><img src="' + imgSrc + '" style="width:100%;height:90%;" onerror="webuploader.show404(this);"/></div>';
