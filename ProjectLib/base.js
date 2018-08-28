@@ -408,7 +408,10 @@ $.extend(com, {
                     maximizable: true,
                     html: '',
                     url: '',
-                    viewModel: query.noop
+                    viewModel: query.noop,
+                    onLoadError: function () {
+                        abp.message.warn("发生了异常的错误，请尝试重新打开!");
+                    }
                 },
                     options);
 
@@ -555,7 +558,7 @@ $.extend(com, {
                     callback(id);
                 }
             },
-            deleted: function (backendService, element, message) {
+            deleted: function (backendService, element, message, deleteService) {
                 var id = 0;
                 if (!element) {
                     element = '#dgGrid';
@@ -563,6 +566,9 @@ $.extend(com, {
                 var template = '<span style="font-weight:bold;">{0}</span>';
                 if (!message) {
                     message = '您确认删除这条记录吗?';
+                }
+                if (!deleteService) {
+                    deleteService = "delete";
                 }
                 var showMessage = $.string.format(template, message);
                 id = com.getSelectId(element);
@@ -573,7 +579,7 @@ $.extend(com, {
                         '系统提示',
                         function (r) {
                             if (r) {
-                                backendService.delete(id).done(function () {
+                                backendService[deleteService](id).done(function () {
                                     abp.message.success('删除成功');
                                     com.btnRefresh(element);
                                 });
@@ -1018,6 +1024,29 @@ $.extend(com, {
                         tableHtml: style + "<table>" + tempRows+"</table>",
                         newFileName: newFileName
                     });
+            },
+            exportGrid: function (dgGridId, isAll) {
+                var opts = $(dgGridId).datagrid('options');
+                if (isAll == undefined) { isAll = true; }
+                var eventData = $.fn.datagrid.extensions.parseContextMenuEventData($(dgGridId), opts, null);
+                $.messager.progress();
+                setTimeout(function () {
+                    $.messager.progress('close');
+                },
+                    1000);
+                $('#searchForm').form('submit', {
+                    url: opts.exportUrl,
+                    onSubmit: function (param) {
+                        param.page = eventData.page;
+                        param.rows = eventData.pageSize;
+                        param.sort = eventData.sort;
+                        param.order = eventData.order;
+                        param.isAll = isAll;
+                    },
+                    success: function () {
+                    }
+                });
+                //alert("导出" + (isAll ? "全部" : "当前页") + "数据");
             }
         });
 })();

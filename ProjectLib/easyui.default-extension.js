@@ -74,7 +74,12 @@
                 fitColumns: true,
                 rownumbers: true,
                 idField: 'Id',
-                treeField: 'DisplayName'
+                treeField: 'DisplayName',
+                onLoadError: function (a, b, c) {
+                    if (arguments[0].status == 403) {
+                        abp.message.warn("您无权访问此方法", '系统提示');
+                    }
+                }
             });
 
         $.extend($.fn.switchbutton.defaults,
