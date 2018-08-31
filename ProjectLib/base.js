@@ -807,7 +807,7 @@ $.extend(com, {
                         $(this).remove();
                     }
                 });
-                $('.dialog-button').find('a').each(function (r) {
+                dom.parent('.panel').find('.dialog-button').find('a').each(function (r) {
                     if ($(this).text().trim() != '关闭') {
                         $(this).remove();
                     }
@@ -837,6 +837,7 @@ $.extend(com, {
                             break;
                         default:
                             $this.css('border', 'none');
+                            $this.attr('disabled', 'disabled');
                             $this.attr('readonly', 'readonly');
                             break;
                     }

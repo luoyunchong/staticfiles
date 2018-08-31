@@ -82,14 +82,16 @@
                 }
             });
 
-        $.extend($.fn.switchbutton.defaults,
-            {
-                width: 46,
-                height: 22,
-                onText: "是",
-                offText: "否",
-                isBool: true
-            });
+        if($.fn.switchbutton!=undefined){
+            $.extend($.fn.switchbutton.defaults,
+                {
+                    width: 46,
+                    height: 22,
+                    onText: "是",
+                    offText: "否",
+                    isBool: true
+                });
+        }
 
 
         /*JQuery EasyUI 扩展*/
