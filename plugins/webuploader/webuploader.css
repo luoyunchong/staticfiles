@@ -24,7 +24,7 @@
 .uploader-list .webuploadinfo { line-height: 24px; font-size: 12px; color: #666666; }
 
 .uploader-list .webupload-button { float: right; margin-right: 6px; }
-
+.uploader-list .webupload-button a:hover{ cursor: pointer;}
 .uploader-list .webuploadstate { font-size: 14px; color: #b0b0b0; }
     .uploader-list .webuploadstate .progressbar-animation { width: 270px; margin-top: 3px; }
     .uploader-list .webuploadstate .webupload-text { font-family: "Microsoft YaHei" !important; font-size: 12px; color: #3d882d; }

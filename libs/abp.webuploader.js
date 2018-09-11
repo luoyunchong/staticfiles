@@ -9,14 +9,16 @@
  */
 var webuploader = webuploader || {};
 var abp = abp || {};
-/**
+/*
  * abp.webuploader.js 是扩展上传文件，有一定的上传样式效果，依赖于jquery,layer,abp.js,abp.layui-alert.js,font-awesomen.css
-        还改了webuploader.js  3949行，解决了fileNumLimit上传文件数量无效的问题 和webuploader.min.js对应的js文件
-        本文件会自动引用applicationPath目录下的webuploader.min.js和webuploader.css文件
-*/
+ *       还改了webuploader.js  3949行，解决了fileNumLimit上传文件数量无效的问题 和webuploader.min.js对应的js文件
+ *      本文件会自动引用applicationPath目录下的webuploader.min.js和webuploader.css文件
+ */
 (function ($, window) {
-    var applicationPath = window.applicationPath === "" ? "" : window.applicationPath || "/bower_components/webuploader/dist";
+    var applicationPath = window.applicationPath === "" ? "" : window.applicationPath || "/bower_components/webuploader";
     var serviceUrl = "http://localhost:61816"
+    webuploader.authorization = "cJmIa29GU49wNq5kGgd9yfx4rqrGdcLGEL_wSGD3hJNWaQcaTnbg-zClLlVcsCzdQNToF6JvHtk1XdjXofZSsoJYL7UecpznK0X-MHqN_LUsU10rGFnoxxHMU-RIvOSjzn3swlOZ2IjeEOIYfg-yJEn3PBzIaNwYrtD-3KuMeB_Z5pKxedbMWcnb5sx9RuAYOfTck4SoyWIa7MObKoFqwZcWIeM-wtgP9tZ9yBEedKsfj3Yb3lezoQMJwEMngN_GzbfdSVzA6kSYBkz2qR3CHZbMTB9ynaTFst7d_6t-qaULh83_YCUGjNmPHgDURTECVQM7PBGDz54CK8t0kpxcKgxuAtK8RHqni9M9mzaw1SKNs7WH79l01SchjsdhoFC1g1GITXVmlolQnPL9LJcGGEOnFOGd-ofJj-ySm6OaDFTMUZcshJ9eUFFX7c7QETOMmswC_m2sj--uMocXdUORSBV8YDXfiYHgAjGv4XJ1wD0VpT402e_6zx9SibuiAEsxM4Rj0mI8TWPMa_6ddXvvig"
+
     function initWebUpload(item, options) {
 
         if (!WebUploader.Uploader.support()) {
@@ -53,7 +55,7 @@ var abp = abp || {};
         var target = $(item); //容器
         var pickerid = webuploader.GUID();
         var uploaderStrdiv = '<div class="webuploader">';
-        target.data('uploadType', opts.uploadType);
+        target.attr('data-uploadType', opts.uploadType);
         var text = opts.uploadType === 'img' ? "选择图片" : "选择文件";
         if (opts.auto) {
             uploaderStrdiv =
@@ -100,9 +102,15 @@ var abp = abp || {};
             fileSizeLimit: opts.fileSizeLimit,
             fileSingleSizeLimit: opts.fileSingleSizeLimit,
             accept: opts.accept,
-            withCredentials:true
+            withCredentials: true
 
         }, opts.innerOptions);
+
+
+        //大文件分片，断点续传，以及秒传功能
+
+
+
 
         uploader = WebUploader.create(webuploaderoptions);
 
@@ -222,18 +230,19 @@ var abp = abp || {};
                 var fileId = $(item)[0].id + file.id;
                 var uploadflieElement = target.find('#' + fileId);
                 if (opts.uploadType === 'file') {
-                    uploadflieElement.find('div.webuploadstate .webupload-text')
-                        .html('正在上传' + Math.round(percentage * 100) + '%');
-                    var $progressElement = uploadflieElement.find('div.webuploadstate #progress-' + fileId);
                     var value = Math.round(percentage * 100);
-                    if ($progressElement.hasClass('progressbar')) {
-                        $progressElement.progressbar('setValue', value);
-                    } else {
-                        $progressElement.progressbar({
-                            value: value,
-                            text: '',
-                            height: 6
-                        });
+                    uploadflieElement.find('div.webuploadstate .webupload-text').html('正在上传' + value + '%');
+                    if ($.fn.progressbar != undefined) {
+                        var $progressElement = uploadflieElement.find('div.webuploadstate #progress-' + fileId);
+                        if ($progressElement.hasClass('progressbar')) {
+                            $progressElement.progressbar('setValue', value);
+                        } else {
+                            $progressElement.progressbar({
+                                value: value,
+                                text: '',
+                                height: 6
+                            });
+                        }
                     }
                 } else {
 
@@ -333,6 +342,8 @@ var abp = abp || {};
                         }
                         //console.info("删除成功:" + data);
                     });
+            } else {
+                callback && callback();
             }
         }
         //删除时执行的方法
@@ -340,13 +351,13 @@ var abp = abp || {};
             function (file) {
                 var fileToken;
                 var fileId = $(item)[0].id + file.id;
-                if (target.data('uploadType') === 'file') {
+                if (target.data('uploadtype') === 'file') {
                     fileToken = target.find("#hiddenInput" + fileId).val();
                 } else {
                     fileToken = target.find('#' + fileId + ' .webupload-list-img-cover .img-upload-state span.file-token').attr('data-filetoken');
                 }
                 deleteFile(fileToken, function () {
-                    if (target.data('uploadType') === 'file') {
+                    if (target.data('uploadtype') === 'file') {
                         $("#hiddenInput " + fileId).remove();
                     }
 
@@ -360,7 +371,7 @@ var abp = abp || {};
 
         uploader.on('uploadBeforeSend', function (object, data, headers) {
             $.extend(headers, {
-                "Authorization": "Bearer ELOnVLY43A-HVWlHAofBQlWhMbfAZEXq3p-4l-F4YUtkLiOZzAC3PPXcvXJx5mjOBLoERnftc5-dRMp4iKDfOoNDvyei8Av_rg3MsSk2dnv4zQZOqjjFIib2WT_yLh2kRhFWREeETYrdNOsUWOvRgsB866QI_nxR27_TZZfwpCEO2AQvDZ4PZs5pPE6J3LWvoAsryrYkCQN3nxJios0AqDnBpcC8wwlyBUyIobY4lhpTsqrIIps94ssHPufyt_GmjTPTiqYQgtx7-f5Wb3F1LztHw_hJoTGKOxYO3QDbjekWZ_idUHcFK43YJu3MrEF88tZoT1lLDRYNDQdPQtZL_WkJc1PsbTCITGNFv8yIE1kreImIQ_ngf6sAVQ0oYE4cQSunghFIS0IER5ti__7lYZpEGx4IEYGlciUqbAV0wXvU7__He7wGoqGAnJzaHewJifkH7LjJvtNhuL-47ey_S0QNCnStyMjTyFhao0h3X9Szsvkr-ZXk1u2W-MW7adYoVJEP9tRLKC-j6BDJKLHo6w"
+                "Authorization": "Bearer " + webuploader.authorization
             });
         });
         //多文件点击上传的方法
@@ -458,7 +469,7 @@ var abp = abp || {};
     }
 
     $.extend(webuploader, {
-        /**
+        /*
          * webuploader的图片预览效果
          * @param {} $ele 当前点击的图片elem
          */
@@ -469,7 +480,7 @@ var abp = abp || {};
             //var html = '<img src="' + imgSrc + '" style="width:100%;height:90%;" onerror="webuploader.show404(this);"/>';
             abp.imagePreviewDialog(imgSrc);
         },
-        /**
+        /*
          * 动态加载webuploader控件
          * @param {any} callback
          */
@@ -487,7 +498,7 @@ var abp = abp || {};
                 callback && callback();
             }
         },
-        /**
+        /*
          *  上传文件模板 
          * @param {boolean} isCheck  是否是查看界面 true/false
          * @returns {} 参数为空时，默认不是查看界面，有删除按钮。参数为true时，无删除按钮
@@ -508,7 +519,7 @@ var abp = abp || {};
                 '</div></div>';
             return template;
         },
-        /**
+        /*
          * 图片上传模板
          * @param {} isCheck 是否是查看界面 true/false
          * @returns {} 参数为空时，默认不是查看界面，有删除功能。参数为true时，无删除功能
@@ -527,7 +538,7 @@ var abp = abp || {};
             return template;
 
         },
-        /**
+        /*
          * 当图片没有时，会显示404图片
          * @param {} img 
          * @returns {} 
@@ -536,7 +547,7 @@ var abp = abp || {};
             img.src = applicationPath + "/images/404.png";
             img.onerror = null;
         },
-        /**
+        /*
          *  编辑时，加载上传控件
          * @param {Object<>} options
          *  参数  | 默认值 | 说明
@@ -568,7 +579,7 @@ var abp = abp || {};
                     setTimeout(function () {
                         var html = '';
                         var $hiddenInput = $(options.elem).find('.UploadhiddenInput');
-                        var uploadType = $(options.elem).data('uploadType');
+                        var uploadType = $(options.elem).data('uploadtype');
                         if (options.isCheck === true) {
                             html += '<div class="uploader-list">';
                             uploadType = options.uploadType;
@@ -587,7 +598,7 @@ var abp = abp || {};
                             var limit = webuploader.bytesToSize(v.FileSize);
                             if (uploadType === 'file') {
                                 //参数（id,文件后缀，文件名，截取后的文件名，fileToken,上传状态（文件大小+上传成功）)
-                                html += webuploader.format(webuploader.template(options.isCheck), v.Id, ext, v.FileName, subName, v.FileToken, limit + "上传成功");
+                                html += webuploader.format(webuploader.template(options.isCheck), v.Id, ext.toLowerCase(), v.FileName, subName, v.FileToken, limit + "上传成功");
                                 $hiddenInput.append('<input type="text" id="hiddenInput' + v.Id + '" class="hiddenInput" value="' + v.FileToken + '" />');
                             } else {
                                 html += webuploader.format(webuploader.templateImg(options.isCheck), v.Id, v.FileName, v.FileToken);
@@ -629,7 +640,7 @@ var abp = abp || {};
             });
             return abpfiles;
         },
-        /**
+        /*
            * 格式化字符串
            * @param {string} "{0}-{1}","a","b"
            * @returns a-b
@@ -643,19 +654,19 @@ var abp = abp || {};
             }
             return arguments[0];
         },
-        /**
-           * 判断变量是否为null或空
-           * @example 用法:
-           * webuploader.isNullOrEmpty(null)
-           */
+        /*
+        * 判断变量是否为null或空
+        * @example 用法:
+        * webuploader.isNullOrEmpty(null)
+        */
         isNullOrEmpty: function (str) { return str === undefined || str === null || str === ""; },
-        /**
+        /*
          * 生成一个guid数据 
          */
         GUID: function () {
             return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         },
-        /**
+        /*
          * 1024MB转换成1GB
          * @param {number} bytes 
          * @returns {} 返回最小不可转换的单位的空间大小
@@ -670,12 +681,12 @@ var abp = abp || {};
         }
     });
 
-    /**
+    /*
      * 扩展方法：得到当前控件已经上传成功的文件地址，多文件，中间以*分割
      */
     $.fn.GetFilesAddress = function () {
         var filesAddress = [];
-        if ($(this).data('uploadType') === 'file') {
+        if ($(this).data('uploadtype') === 'file') {
             $(this).find(".UploadhiddenInput .hiddenInput").each(function () {
                 filesAddress.push($(this).val());
             });
@@ -686,7 +697,7 @@ var abp = abp || {};
         }
         return filesAddress.join('*');
     }
-    /**
+    /*
      * 扩展方法：初始化上传文件
      * @param {Object<>} 参数为webuploader插件的所有参数
      * @param 新增参数:uploadType:'file'或'img' 上传类型：file为文件;img为图片，有上传预览效果
@@ -695,7 +706,7 @@ var abp = abp || {};
         var ele = this;
         webuploader.getWebUpload(function () {
             initWebUpload(ele, options);
-            options.callback && options.callback();
+            options && options.callback && options.callback();
         });
     }
 })(jQuery, window);
