@@ -107,23 +107,26 @@ var abpLayer;
         img.src = imgSrc;      
         img.onload = function () {
 
-            var width=img.width,height=img.height;
-
-            var windowHeight = $(window).height();
-            var windowWidth = $(window).width();
+            var width = img.width, height = img.height;
+            var w = window;
+            if (top != window) {
+                w = top;
+            }
+            var windowHeight = $(w).height();
+            var windowWidth = $(w).width();
             if (height > windowHeight) {
-                height = windowHeight;  
+                height = windowHeight;
             }
             if (width > windowWidth) {
-                width= windowWidth;
+                width = windowWidth;
             }
 
-            top.layer.open({
+            w.layer.open({
                 type: 1,
-                anim :1,
+                anim: 1,
                 title: false,
                 shadeClose: true,
-                area: [width+ 'px', height + 'px'], //宽高
+                area: [width + 'px', height + 'px'], //宽高
                 content: '<div style=""><img src="' + imgSrc + '" style="width:100%;height:90%;" onerror="webuploader.show404(this);"/></div>'
             });
         };

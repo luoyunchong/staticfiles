@@ -16,8 +16,8 @@ var abp = abp || {};
  */
 (function ($, window) {
     var applicationPath = window.applicationPath === "" ? "" : window.applicationPath || "/bower_components/webuploader";
-    var serviceUrl = "http://localhost:61816"
-    webuploader.authorization = "cJmIa29GU49wNq5kGgd9yfx4rqrGdcLGEL_wSGD3hJNWaQcaTnbg-zClLlVcsCzdQNToF6JvHtk1XdjXofZSsoJYL7UecpznK0X-MHqN_LUsU10rGFnoxxHMU-RIvOSjzn3swlOZ2IjeEOIYfg-yJEn3PBzIaNwYrtD-3KuMeB_Z5pKxedbMWcnb5sx9RuAYOfTck4SoyWIa7MObKoFqwZcWIeM-wtgP9tZ9yBEedKsfj3Yb3lezoQMJwEMngN_GzbfdSVzA6kSYBkz2qR3CHZbMTB9ynaTFst7d_6t-qaULh83_YCUGjNmPHgDURTECVQM7PBGDz54CK8t0kpxcKgxuAtK8RHqni9M9mzaw1SKNs7WH79l01SchjsdhoFC1g1GITXVmlolQnPL9LJcGGEOnFOGd-ofJj-ySm6OaDFTMUZcshJ9eUFFX7c7QETOMmswC_m2sj--uMocXdUORSBV8YDXfiYHgAjGv4XJ1wD0VpT402e_6zx9SibuiAEsxM4Rj0mI8TWPMa_6ddXvvig"
+    var serviceUrl = "";//"http://localhost:61816"
+    webuploader.authorization = "";//"cJmIa29GU49wNq5kGgd9yfx4rqrGdcLGEL_wSGD3hJNWaQcaTnbg-zClLlVcsCzdQNToF6JvHtk1XdjXofZSsoJYL7UecpznK0X-MHqN_LUsU10rGFnoxxHMU-RIvOSjzn3swlOZ2IjeEOIYfg-yJEn3PBzIaNwYrtD-3KuMeB_Z5pKxedbMWcnb5sx9RuAYOfTck4SoyWIa7MObKoFqwZcWIeM-wtgP9tZ9yBEedKsfj3Yb3lezoQMJwEMngN_GzbfdSVzA6kSYBkz2qR3CHZbMTB9ynaTFst7d_6t-qaULh83_YCUGjNmPHgDURTECVQM7PBGDz54CK8t0kpxcKgxuAtK8RHqni9M9mzaw1SKNs7WH79l01SchjsdhoFC1g1GITXVmlolQnPL9LJcGGEOnFOGd-ofJj-ySm6OaDFTMUZcshJ9eUFFX7c7QETOMmswC_m2sj--uMocXdUORSBV8YDXfiYHgAjGv4XJ1wD0VpT402e_6zx9SibuiAEsxM4Rj0mI8TWPMa_6ddXvvig"
 
     function initWebUpload(item, options) {
 
@@ -182,7 +182,7 @@ var abp = abp || {};
                 }
             });
 
-        /**
+        /*
         * 验证文件格式以及文件大小
         */
         uploader.on("error",
