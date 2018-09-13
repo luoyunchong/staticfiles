@@ -807,7 +807,8 @@ $.extend(com, {
                         $(this).remove();
                     }
                 });
-                dom.parent('.panel').find('.dialog-button').find('a').each(function (r) {
+                
+                dom.parent().parent().find('.dialog-button').find('a').each(function (r) {
                     if ($(this).text().trim() != '关闭') {
                         $(this).remove();
                     }
