@@ -358,7 +358,7 @@ var abp = abp || {};
                 }
                 deleteFile(fileToken, function () {
                     if (target.data('uploadtype') === 'file') {
-                        $("#hiddenInput " + fileId).remove();
+                        $("#hiddenInput" + fileId).remove();
                     }
 
                     target.find("#" + fileId).hide(500,

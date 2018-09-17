@@ -369,10 +369,20 @@ $.fn.formSerialize = function () {
             case $this.is("[class*=easyui-datebox]"):
                 postdata[id] = $this.datebox('getValue');
                 break;
+            case $this.is("[class*=radiobox-f]"):
+            postdata[$this.attr('radioboxname')] = $('.' + $this.attr('radioboxname')).radiobox('getValues');
+            break;
             default:
                 postdata[id] = $this.val();
                 break;
         }
     });
+
+    $form.find('.webuploader-container').parent().parent().each(function (r) {
+        var $this = $(this);
+        var id = $this.attr('id');
+        postdata[id] = $this.GetFilesAddress();
+    })
+
     return postdata;
 };
