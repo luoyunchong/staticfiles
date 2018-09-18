@@ -990,11 +990,12 @@ $.extend(com, {
                 .table-head { padding-right: 17px; color: #000; }\
                 .table-body { width: 100%; height: 394px;}\
                 .table-head table, .table-body table { width: 100 %; }</style> ';
-                var o = $(tableId)[0].outerHTML;
+
                 var tempRows = "";
-                $(o).find("tr").not('.noExl').each(function (i, p) {
+
+                $(tableId +'>tbody>tr,'+tableId+'>thead>tr').not('.noExl').each(function (i, p) {
                     tempRows += "<tr>";
-                    $(p).find("td,th").not('.noExl').each(function (i, q) {
+                    $(p).children("td,th").not('.noExl').each(function (i, q) {
                         var rc = {
                             rows: $(this).attr("rowspan"),
                             cols: $(this).attr("colspan"),

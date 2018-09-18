@@ -2,8 +2,8 @@
  * 上传控件实现
  * @example 该js还是依赖于以下js
     <link href="~/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-    <script src="~/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="~/bower_components/layer/dist/layer.js"></script>
+    <script src="~/bower_components/jquery/jquery.min.js"></script>
+    <script src="~/bower_components/layer/layer.js"></script>
     <script src="~/Scripts/libs/abp.js"></script>
     <script src="~/Scripts/libs/abp.layui-alert.js"></script>
  */

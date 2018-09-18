@@ -334,7 +334,7 @@ $.fn.formSerialize = function () {
     $form.find('input,select,textarea').each(function (r) {
         var $this = $(this);
         var id = $this.attr('id');
-        if (id == undefined || id.indexOf("_easyui_textbox_input") !== -1) {
+        if (id == undefined || id.indexOf("_easyui_textbox_input") !== -1 || $this.hasClass('hiddenInput')) {
             return;
         }
         switch (true) {
@@ -382,7 +382,7 @@ $.fn.formSerialize = function () {
         var $this = $(this);
         var id = $this.attr('id');
         postdata[id] = $this.GetFilesAddress();
-    })
+    });
 
     return postdata;
 };
