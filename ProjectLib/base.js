@@ -844,13 +844,18 @@ $.extend(com, {
                     }
                 });
             },
+            /**
+             * 以Post形式打开新页面,可传递参数
+             * @param {string}url 
+             * @param {Object}formData 
+             */
             openPostWindow: function (url, formData) {
 
                 var tempForm = document.createElement("form");
                 tempForm.id = "tempForm1";
                 tempForm.method = "post";
                 tempForm.action = url;
-                tempForm.target = "_blank"; //打开新页面
+                tempForm.target = "_blank"; 
                 $.each(formData,
                     function (i, v) {
                         var hideInput1 = document.createElement("input");
@@ -954,6 +959,11 @@ $.extend(com, {
             guid: {
                 empty: "00000000-0000-0000-0000-000000000000"
             },
+            /**
+             * 将表格导出成excel
+             * @param {string} elemId 表格选择器
+             * @param {string} newName 导出的新表格名称
+             */
             exportExcel: function (elemId, newName) {
                 if (newName == undefined) {
                     newName = com.uuid();
@@ -967,7 +977,12 @@ $.extend(com, {
                     exclude_inputs: true
                 });
             },
-            exportWord: function (tableId, newFileName) {
+            /**
+             * 将表格导出成word
+             * @param {string} tableElem 表格选择器
+             * @param {string} newFileName 导出的excel的文件名
+             */
+            exportWord: function (tableElem, newFileName) {
                 var style = '<style>table{ width:100%;text-align:center;}\
                 table, th, td\
                 {\
@@ -993,7 +1008,7 @@ $.extend(com, {
 
                 var tempRows = "";
 
-                $(tableId +'>tbody>tr,'+tableId+'>thead>tr').not('.noExl').each(function (i, p) {
+                $(tableElem +'>tbody>tr,'+tableElem+'>thead>tr').not('.noExl').each(function (i, p) {
                     tempRows += "<tr>";
                     $(p).children("td,th").not('.noExl').each(function (i, q) {
                         var rc = {
@@ -1050,6 +1065,42 @@ $.extend(com, {
                     }
                 });
                 //alert("导出" + (isAll ? "全部" : "当前页") + "数据");
+            },
+            /**
+             * 导入excel文件
+             * @param {string} excelName excel的文件名无后缀
+             * @param {string} importUrl 导入文件的后台地址
+             */
+            btnImport: function(excelName, importUrl) {
+              var pDialog=  com.dialog({
+                    title: "导入",
+                    width: '620',
+                    height: '320',
+                    href: "/File/ImportDetailModal?excelName=" + excelName,
+                    buttons:[ {
+                        text: '关闭',
+                        iconCls: 'icon-cancel',
+                        handler: function () {
+                            var fileToken = GetFilesAddress();
+                            if (fileToken == "") {
+                               abp.message.warn('请先选择导入的文件！');
+                                return;
+                            }
+                            com.setBusy(pDialog, true);
+                            abp.ajax({
+                                url: importUrl,
+                                data: JSON.stringify({
+                                    fileToken: fileToken
+                                })
+                            }).done(function (d) {
+                                com.filter('#searchForm', '#dgGrid');
+                                abp.message.success(d);
+                                com.setBusy(pDialog, false);
+                                pDialog.dialog('close');
+                            });
+                        }
+                    }]
+                });
             }
         });
 })();

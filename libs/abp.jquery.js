@@ -31,7 +31,7 @@
                 $.messager.progress();
             } else {
                 $.messager.progress({
-                    title:'加载中...',
+                    title: '加载中...',
                     text: options.loadingMsg
                 });
             }
@@ -47,14 +47,20 @@
                         userOptions.success && userOptions.success(data);
                     }
                 }).fail(function (jqXhr) {
+                    $.messager.progress('close');
                     if (jqXhr.responseJSON && jqXhr.responseJSON.__abp) {
                         abp.ajax.handleResponse(jqXhr.responseJSON, userOptions, $dfd, jqXhr);
                         return;
                     } else {
-                        var json = $.parseJSON(jqXhr.responseText);
-                        if (json && json.__abp) {
-                            abp.ajax.handleResponse(json, userOptions, $dfd, jqXhr);
-                            return;
+                        if (jqXhr.responseText.indexOf('__abp') == -1) {
+                            var msg ="<span class='label label-default'>错误号：</span><span>" +jqXhr.status +"(" +jqXhr.statusText +"</span>)；<hr /><pre lang='js'>" +abp.ajax.getFormattedParameters(jqXhr.responseText)+"</pre>";
+                            abp.message.showErrorPage(msg);
+                        } else {
+                            var json = $.parseJSON(jqXhr.responseText);
+                            if (json && json.__abp) {
+                                abp.ajax.handleResponse(json, userOptions, $dfd, jqXhr);
+                                return;
+                            }
                         }
                     }
                     abp.ajax.handleNonAbpErrorResponse(jqXhr, userOptions, $dfd);
@@ -75,34 +81,31 @@
                 'X-Requested-With': 'XMLHttpRequest'
             },
             showMsg: false,
-            loadingMsg:'',
+            loadingMsg: '',
             showLoading: true
         },
-
         defaultError: {
-            message: 'An error has occurred!',
-            details: 'Error detail not sent by server.'
+            message: '发生了一个错误！',
+            details: '服务器未发送的错误详细信息.'
         },
 
         defaultError401: {
-            message: 'You are not authenticated!',
-            details: 'You should be authenticated (sign in) in order to perform this operation.'
+            message: '你没有被认证！',
+            details: '为了执行这个操作，您应该被认证（登录）。'
         },
 
         defaultError403: {
-            message: 'You are not authorized!',
-            details: 'You are not allowed to perform this operation.'
+            message: '你没有被授权！',
+            details: '您不允许执行此操作.'
         },
 
         defaultError404: {
-            message: 'Resource not found!',
-            details: 'The resource requested could not found on the server.'
+            message: '资源未找到!',
+            details: '服务器上找不到请求的资源。.'
         },
-
         logError: function (error) {
             abp.log.error(error);
         },
-
         showError: function (error) {
             if (!$.array.isNullOrEmpty(error.validationErrors)) {
                 var errorMsg = "";
@@ -128,7 +131,7 @@
         },
 
         handleNonAbpErrorResponse: function (jqXHR, userOptions, $dfd) {
-            //debugger;
+         
             if (userOptions.abpHandleError !== false) {
                 switch (jqXHR.status) {
                     case 401:
@@ -175,7 +178,7 @@
                 if (data.success === true) {
                     //然后弹出成功操作的提示
                     if (userOptions.showMsg) {
-                        if (data.result == null||typeof(data.result)=="number") {
+                        if (data.result == null || typeof (data.result) == "number") {
                             data.result = "操作成功!";
                         }
                         abp.message.success(data.result, '提示');

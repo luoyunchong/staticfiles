@@ -33,8 +33,6 @@
         }
     };
 
-    /* MESSAGE **************************************************/
-
     var showMessage = function (type, message, title) {
         if (!title) {
             title = '系统提示';
@@ -111,6 +109,15 @@
             };
         }
     };
+
+    abp.message.showErrorPage=function(content){
+        com.dialog({
+            title:'错误提示',
+            width:'100%',
+            height:'100%',
+            content:content
+        });
+    }
 
     abp.message.confirm = function (message, titleOrCallback, callback) {
         var userOpts = {
