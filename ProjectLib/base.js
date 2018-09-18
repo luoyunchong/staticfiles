@@ -338,6 +338,15 @@ $.extend(com, {
             }
         }
         return e.join("").toLowerCase();
+    },
+    loadAbp(data) {
+        var result;
+        if (data.__abp === true) {
+            result = data.result;
+        } else {
+            result = data;
+        }
+        return result;
     }
 });
 

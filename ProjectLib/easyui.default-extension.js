@@ -1,23 +1,13 @@
 ﻿
 (function () {
-    function loadAbp(data) {
-        var result;
-        if (data.__abp === true) {
-            result = data.result;
-        } else {
-            result = data;
-        }
-        return result;
-    }
+    
     if ($.fn.datagrid) {
      
         $.extend($.fn.combotree.defaults,
             {
                 lines: true,
                 animate: true,
-                loadFilter: function (data, parent) {
-                    return loadAbp(data);
-                }
+                loadFilter:com.loadAbp
             });
 
         $.extend($.fn.datagrid.defaults,
@@ -57,15 +47,11 @@
                 valueField: 'id',
                 textField: 'text',
                 editable: false,
-                loadFilter: function (data, parent) {
-                    return loadAbp(data);
-                }
+                loadFilter: com.loadAbp
             });
         $.extend($.fn.tree.defaults,
             {
-                loadFilter: function (data, parent) {
-                    return loadAbp(data);
-                }
+                loadFilter: com.loadAbp
             });
         $.extend($.fn.treegrid.defaults,
             {
