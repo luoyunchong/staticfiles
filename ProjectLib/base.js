@@ -339,7 +339,7 @@ $.extend(com, {
         }
         return e.join("").toLowerCase();
     },
-    loadAbp(data) {
+    loadAbp:function(data) {
         var result;
         if (data.__abp === true) {
             result = data.result;
