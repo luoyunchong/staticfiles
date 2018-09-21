@@ -1087,8 +1087,8 @@ $.extend(com, {
                     height: '320',
                     href: "/File/ImportDetailModal?excelName=" + excelName,
                     buttons:[ {
-                        text: '关闭',
-                        iconCls: 'icon-cancel',
+                        text: '确认',
+                        iconCls: 'icon-ok',
                         handler: function () {
                             var fileToken = GetFilesAddress();
                             if (fileToken == "") {
