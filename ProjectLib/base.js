@@ -556,15 +556,19 @@ $.extend(com, {
             /**
              * 编辑前统一提示信息,当Id为0时，说明未选中任何记录，其他时，将Id,作为回调函数的参数
              * @param {elementId} element '#dgGrid'
-             * @param {} callback 回调函数 function(id){} id为当前选中的id
+             * @param {} callback 回调函数 function(id){} id为当前选中的id;node:当前数据记录
              * @returns {} 
              */
             edit: function (element, callback) {
-                var id = com.getSelectId(element);
-                if (!id) {
+                if (!element) {
+                    element = '#dgGrid';
+                }
+                var $grid = $(element);
+                var node = $grid.datagrid('getSelected');
+                if (!node) {
                     abp.message.warn('在操作之前，请先选中一条记录！');
                 } else {
-                    callback(id);
+                    callback(node.Id, node);
                 }
             },
             deleted: function (backendService, element, message, deleteService) {
