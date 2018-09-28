@@ -68,6 +68,30 @@ $.extend(com, {
                 grid.datagrid('deleteRow', selectIndex);
             }
         };
+        /**
+         * addnew 多行之后 若是出现删除bug，可在addnew 之后 调用  grid.datagrid('clearSelections');
+         */
+        this.deleteallrows = function () {
+            var rows = grid.datagrid('getSelections');
+            var selectRows = rows.concat();
+            if (selectRows.length) {
+                for (var i in selectRows) {
+                    if (selectRows.hasOwnProperty(i)) {
+                        var selectIndex = grid.datagrid('getRowIndex', selectRows[i]);
+                        if (selectIndex == self.editIndex) {
+                            grid.datagrid('cancelEdit', self.editIndex);
+                            self.editIndex = undefined;
+                        }
+                        grid.datagrid('deleteRow', selectIndex);
+                    }
+                }
+                grid.datagrid('clearSelections');
+                return true;
+            }
+            grid.datagrid('clearSelections');
+            return false;
+        };
+
         this.reject = function () {
             grid.datagrid('rejectChanges');
         };
