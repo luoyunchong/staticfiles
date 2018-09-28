@@ -51,3 +51,11 @@
     </form>
 </div>
 ~~~
+
+3. 全局增加 css样式
+~~~
+.prompt-center .dialog-button { text-align: center; }
+
+~~~
+
+4. 新增 this.deleteallrows()方法 用于编辑行中删除多行数据
