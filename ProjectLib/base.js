@@ -363,7 +363,7 @@ $.extend(com, {
         }
         return e.join("").toLowerCase();
     },
-    loadAbp(data) {
+    loadAbp:function(data) {
         var result;
         if (data.__abp === true) {
             result = data.result;
@@ -580,15 +580,19 @@ $.extend(com, {
             /**
              * 编辑前统一提示信息,当Id为0时，说明未选中任何记录，其他时，将Id,作为回调函数的参数
              * @param {elementId} element '#dgGrid'
-             * @param {} callback 回调函数 function(id){} id为当前选中的id
+             * @param {} callback 回调函数 function(id){} id为当前选中的id;node:当前数据记录
              * @returns {} 
              */
             edit: function (element, callback) {
-                var id = com.getSelectId(element);
-                if (!id) {
+                if (!element) {
+                    element = '#dgGrid';
+                }
+                var $grid = $(element);
+                var node = $grid.datagrid('getSelected');
+                if (!node) {
                     abp.message.warn('在操作之前，请先选中一条记录！');
                 } else {
-                    callback(id);
+                    callback(node.Id, node);
                 }
             },
             deleted: function (backendService, element, message, deleteService) {
@@ -1111,8 +1115,8 @@ $.extend(com, {
                     height: '320',
                     href: "/File/ImportDetailModal?excelName=" + excelName,
                     buttons:[ {
-                        text: '关闭',
-                        iconCls: 'icon-cancel',
+                        text: '确认',
+                        iconCls: 'icon-ok',
                         handler: function () {
                             var fileToken = GetFilesAddress();
                             if (fileToken == "") {
@@ -1133,6 +1137,31 @@ $.extend(com, {
                             });
                         }
                     }]
+                });
+            },
+            /**
+             * 填写单个提示信息，增加表单验证功能 
+             */
+            prompt: function (promptMessage, okCallback) {
+                var pDialog = com.dialog({
+                    title: '提示信息',
+                    cls:'prompt-center',
+                    minimizable: false,
+                    maximizable: false,
+                    width: 300,
+                    height: 189,
+                    href: '/File/PromptModal?promptMessage=' + promptMessage,
+                    buttons: [
+                        {
+                            text: '确定',
+                            iconCls: 'icon-ok',
+                            handler: function () {
+                                var valid = pDialog.find('form').form('validate');
+                                if (!valid) return false;
+                                okCallback && okCallback(pDialog);
+                            }
+                        }
+                    ]
                 });
             }
         });
