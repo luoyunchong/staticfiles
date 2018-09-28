@@ -1114,6 +1114,31 @@ $.extend(com, {
                         }
                     }]
                 });
+            },
+            /**
+             * 填写单个提示信息，增加表单验证功能 
+             */
+            prompt: function (promptMessage, okCallback) {
+                var pDialog = com.dialog({
+                    title: '提示信息',
+                    cls:'prompt-center',
+                    minimizable: false,
+                    maximizable: false,
+                    width: 300,
+                    height: 189,
+                    href: '/File/PromptModal?promptMessage=' + promptMessage,
+                    buttons: [
+                        {
+                            text: '确定',
+                            iconCls: 'icon-ok',
+                            handler: function () {
+                                var valid = pDialog.find('form').form('validate');
+                                if (!valid) return false;
+                                okCallback && okCallback(pDialog);
+                            }
+                        }
+                    ]
+                });
             }
         });
 })();
