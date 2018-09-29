@@ -16,9 +16,9 @@ var abp = abp || {};
  */
 (function ($, window) {
     var applicationPath = window.applicationPath === "" ? "" : window.applicationPath || "/bower_components/webuploader";
-    
+
     var serviceUrl = "http://localhost:61816"
-    webuploader.authorization = "XGNAnZNHjWwZOhrVvPIauUYMe5qhR6umSh758xYU_ExeWWZ7jiAdnzwNKbUg4P5nmkrXS9rRO1x1fpxq84HWO8u-SOI4CooiCI6wrl7Fcf02b5j6zyZKDdl0ojusb56aqW0bdseDYK2qUrIPEJKRhdeDcdXhFRfp5XfmhVqa9VNQWYnVETEZOtDzKtz6agbK79SUYvXkSinvVXvscgiTJzF5Dmo4CqVhiuY1AJTGOMm1e6m1mplxZ0SXBalaY89uNgrwdllJEIL6ZMkeZT1s_NukTKV7jKFuP-TkwxBObaa68MNbF5qLUbLhKtNkOk-lAMXQeiS8dF-EelMwy8iP1yfycvq0mhAnA42gwTcXocgMGhEl6FQgrG5LiB7ocjCZgeCQYI8kwmyu_YQay7Z3yexP_3PQXxpiCV-PRnZitd_cMbXMJhjJfps8qIXQQMkluB_XFR7qCzodqr4H2wcGZNTO02U3wGsr9kfp2k-bY7Zq3eehyRA2V75kV_3-ojcNyeIXvUmo32oFWvjTvsqIEQ"
+    webuploader.authorization = "GMyFTVCKRstZ0doyTQYVMTW6hprHTgRvjAIAiGATzaAsDLmj5_VO6isChVhTo6WaHKTS0fieCTINh6LYOD0KM2HFXMhns3JaFbUfXzZKWtqpxSxEYY6pk5J59CGjLxnl1QGxIhEvWCWd8fQ4gS5Zu3h5vQXZqi6wBt6GY7Yi15qr9ddV5-ynukLUYp2qqxs0p7CVeQgMAGk-ueBAi75sJhqHXWMR4KWzRzTj-r7o3f6KaWO5tpJTwlKl32zDwkp6mfKDtv9w9qP0b8IuTnJ-n0ABRua_6rdP9ngo_Jg--Ai7n-H2aChR4eaJRgLPdMAHk9OI7tIRY4pf1KkABqnrAylKRDUNiCotEOAwtlAZHwF6TZCd66L3QDyWiTkxRLY1brpofVsqoqKcqf_sMqlMJ1litLtTj47l66KKEcFWTlUPGwWNX7R7GFnL_f_4ugNmgrBoApUEWIlkVATtWMeX2F6wQYJIDhxoJ9tYgTBmZnXbBNLmRJud1qhqNafBG-UyAdflUVSy5He6wf6uiUxSKQ"
 
     // var serviceUrl="";
     // webuploader.authorization="";
@@ -37,14 +37,17 @@ var abp = abp || {};
         var defaults = {
             auto: true,
             hiddenInputId: "uploadifyHiddenInputId", // input hidden id
-            onAllComplete: function (event) { }, // 当所有file都上传后执行的回调函数
-            onComplete: function (event) { }, // 每上传一个file的回调函数
+            onAllComplete: function (event) {}, // 当所有file都上传后执行的回调函数
+            onComplete: function (event) {}, // 每上传一个file的回调函数
             innerOptions: {},
             fileNumLimit: 20, //验证文件总数量, 超出则不允许加入队列
             fileSizeLimit: 100 * 1024 * 1024, //验证文件总大小是否超出限制, 超出则不允许加入队列。
             fileSingleSizeLimit: 8 * 1024 * 1024, //验证单个文件大小是否超出限制, 超出则不允许加入队列
             PostbackHold: false,
-            uploadType: 'file'//file、img
+            uploadType: 'file' //file、img
+        };
+        var userInfo = {
+            md5: ''
         };
 
         var opts = $.extend(defaults, options);
@@ -98,7 +101,7 @@ var abp = abp || {};
             // 文件接收服务端。
             server: serviceUrl + '/File/UploadFile',
             deleteServer: serviceUrl + '/File/Delete',
-            md5Server:serviceUrl+'/File/Md5Validate',
+            md5Server: serviceUrl + '/File/Md5Validate',
             // 选择文件的按钮。可选。
             // 内部根据当前运行是创建，可能是input元素，也可能是flash.
             pick: '#' + pickerid,
@@ -109,65 +112,65 @@ var abp = abp || {};
             fileSingleSizeLimit: opts.fileSingleSizeLimit,
             accept: opts.accept,
             withCredentials: true
-
         }, opts.innerOptions);
-
-
 
         //大文件分片，断点续传，以及秒传功能
         // 在文件开始发送前做些异步操作。做md5验证
         // WebUploader会等待此异步操作完成后，开始发送文件。
         WebUploader.Uploader.register({
-            "before-send-file":"beforeSendFile"
-        },{
-            beforeSendFile: function(file){
+            "before-send-file": "beforeSendFile"
+        }, {
+            beforeSendFile: function (file) {
                 var task = new $.Deferred();
-                
                 var $fileId = $(item)[0].id + file.id;
-                (new WebUploader.Uploader()).md5File(file, 0, 10*1024*1024).progress(function(percentage){
+
+                (new WebUploader.Uploader()).md5File(file, 0, 10 * 1024 * 1024).progress(function (percentage) {
                     var uploadflieElement = target.find('#' + fileId);
                     if (opts.uploadType === 'file') {
                         var value = Math.round(percentage * 100);
                         uploadflieElement.find('div.webuploadstate .webupload-text').html('正在上传' + value + '%');
                     }
-                }).then(function(val){
+                }).then(function (val) {
+                    userInfo.md5 = val;
+
                     $.ajax({
-                        type: "POST"
-                        , url: webuploaderoptions.md5Server
-                        , data: {
-                            md5: val       //后台接收 String md5
-                        }
-                        , cache: false
-                        , timeout: 3000
-                        , dataType: "json"
-                    }).then(function(response, textStatus, jqXHR){
-                        if(response.success==true){   //若存在，这返回失败给WebUploader，(后台操作)表明该文件不需要上传，然后就可以把数据库查询出的文件信息的物理路径给新文件
-                            task.reject(); //
+                        headers:{
+                            "Authorization": "Bearer " + webuploader.authorization
+                        },
+                        type: "POST",
+                        url: webuploaderoptions.md5Server,
+                        data: {
+                            md5: val
+                        },
+                        cache: false,
+                        timeout: 3000,
+                        dataType: "json"
+                    }).then(function (response, textStatus, jqXHR) {
+                            //若存在，这返回失败给WebUploader，(后台操作)表明该文件不需要上传，然后就可以把数据库查询出的文件信息的物理路径给新文件
+                        if (response.success == true) { 
+                           //task.reject('秒传成功'); 
                             uploader.skipFile(file);
-                           //上传成功事件
+                            //上传成功事件
                             var $fileId = $(item)[0].id + file.id;
                             if (opts.uploadType === 'file') {
                                 var limit = webuploader.bytesToSize(file.size);
                                 var downUrl = serviceUrl + '/File/Download?fileToken=' + response.result + '&newName=' + file.name;
-                                
+
                                 target.find('#' + $fileId).find('div.webuploadstate .webupload-text').html(limit + ' 秒传');
                                 target.find('#' + $fileId)
-                                .find('div.webuploadinfo .webupload-button a')
-                                .after('<a href="' + downUrl + '" target="_blank"><span  class="webupload-download">下载</span></a>');
+                                    .find('div.webuploadinfo .webupload-button a')
+                                    .after('<a href="' + downUrl + '" target="_blank"><span  class="webupload-download">下载</span></a>');
                                 $hiddenInput.append('<input type="text" id="hiddenInput' + $fileId + '" class="hiddenInput" value="' + response.result + '" />');
-                                
+
                             } else {
                                 window.setTimeout(function () {
                                     target.find('#' + $fileId + ' img').attr('src', serviceUrl + '/File/Download?fileToken=' + response.result);
                                     target.find('#' + $fileId + ' .webupload-list-img-cover .img-upload-state span.file-token').attr('data-filetoken', response.result);
-                                },500);
+                                }, 500);
                             }
-                        }else{
-                            debugger;
-                            task.resolve();
-                        }
-                    }, function(jqXHR, textStatus, errorThrown){    //任何形式的验证失败，都触发重新上传
-                       debugger;
+                        } 
+                        task.resolve();
+                    }, function (jqXHR, textStatus, errorThrown) { //任何形式的验证失败，都触发重新上传
                         task.resolve();
                     });
                 });
@@ -185,15 +188,7 @@ var abp = abp || {};
                 function (index, fileData) {
                     var newid = webuploader.GUID();
                     fileData.queueId = newid;
-                    $list.append('<div id="' +
-                        newid +
-                        '" class="item">' +
-                        '<div class="info">' +
-                        fileData.name +
-                        '</div>' +
-                        '<div class="state">已上传</div>' +
-                        '<div class="del"></div>' +
-                        '</div>');
+                    $list.append('<div id="' + newid + '" class="item">' + '<div class="info">' + fileData.name + '</div><div class="state">已上传</div><div class="del"></div></div>');
                 });
             hdFileData.val(JSON.stringify(jsonData));
         }
@@ -214,12 +209,12 @@ var abp = abp || {};
                 var fileUpload = "";
                 if (opts.uploadType === 'file') {
                     fileUpload = '<div id="' + fileId + '" class="item">\
-                                         <div class="nui-ico nui-ico-file32 nui-ico-file32-'+ file.ext.toLowerCase() + '"></div>\
+                                         <div class="nui-ico nui-ico-file32 nui-ico-file32-' + file.ext.toLowerCase() + '"></div>\
                                             <div class="webuploadinfo"> <span title="' + file.name + '">' + subName + '</span>\
                                                 <div class="webupload-button"><a><span class="webupload-delete" data-id="' + fileId + '">删除</span></a></div>\
                                             </div>\
                                             <div class="webuploadstate"><span class="webupload-text">等待上传</span>\
-                                                 <div id="progress-'+ fileId + '" class="progressbar-animation"></div>\
+                                                 <div id="progress-' + fileId + '" class="progressbar-animation"></div>\
                                              </div>\
                                      </div>';
                 } else {
@@ -236,7 +231,7 @@ var abp = abp || {};
                             </div>\
                           </div>';
                 }
-                    
+
                 $list.append(fileUpload);
 
                 //自动上传
@@ -246,8 +241,8 @@ var abp = abp || {};
             });
 
         /*
-        * 验证文件格式以及文件大小
-        */
+         * 验证文件格式以及文件大小
+         */
         uploader.on("error",
             function (type) {
                 var limit = 0;
@@ -314,21 +309,22 @@ var abp = abp || {};
 
         uploader.on('uploadSuccess',
             function (file, response) {
+                if(response==undefined)return;
                 //上传成功事件
                 //后台保存文件属性信息services 重构，后台上传文件的时候，就把数据存到后台
                 var $fileId = $(item)[0].id + file.id;
                 if (opts.uploadType === 'file') {
                     if (response.success === false) {
                         abp.message.error(response.error.message);
-                        target.find('#' + $fileId).find('div.webuploadstate .webupload-text').html(response.error.message);
+                        target.find('#' + $fileId).find('div.webuploadstate .webupload-text').html(response.error.message).css('color','red');
                     } else {
                         var limit = webuploader.bytesToSize(file.size);
                         var downUrl = serviceUrl + '/File/Download?fileToken=' + response.result + '&newName=' + file.name;
 
                         target.find('#' + $fileId).find('div.webuploadstate .webupload-text').html(limit + ' 上传成功');
                         target.find('#' + $fileId)
-                        .find('div.webuploadinfo .webupload-button a')
-                        .after('<a href="' + downUrl + '" target="_blank"><span  class="webupload-download">下载</span></a>');
+                            .find('div.webuploadinfo .webupload-button a')
+                            .after('<a href="' + downUrl + '" target="_blank"><span  class="webupload-download">下载</span></a>');
                         $hiddenInput.append('<input type="text" id="hiddenInput' + $fileId + '" class="hiddenInput" value="' + response.result + '" />');
                     }
                 } else {
@@ -339,7 +335,7 @@ var abp = abp || {};
                         window.setTimeout(function () {
                             target.find('#' + $fileId + ' img').attr('src', serviceUrl + '/File/Download?fileToken=' + response.result);
                             target.find('#' + $fileId + ' .webupload-list-img-cover .img-upload-state span.file-token').attr('data-filetoken', response.result);
-                        },500);
+                        }, 500);
                     }
                 }
 
@@ -347,9 +343,8 @@ var abp = abp || {};
             });
 
         uploader.on('uploadError',
-            function (file) {
-                debugger;
-                target.find('#' + $(item)[0].id + file.id).find('div.webuploadstate .webupload-text').html('上传出错');
+            function (file, reason) {
+                target.find('#' + $(item)[0].id + file.id).find('div.webuploadstate .webupload-text').html(reason);
             });
 
         uploader.on('uploadComplete',
@@ -371,34 +366,38 @@ var abp = abp || {};
                 if (state === 'uploading') {
                     $btn.text('暂停上传');
                 } else {
-                    uploader.option('formData',
-                        {
-                            __RequestVerificationToken: $('form input[name=__RequestVerificationToken]').val()
-                        });
                     $btn.text('开始上传');
                 }
             });
 
         var deleteFile = function (fileToken, callback) {
-            if (!webuploader.isNullOrEmpty(fileToken)) {
-                $.post(webuploaderoptions.deleteServer,
-                    { fileToken: fileToken },
-                    function (data) {
-                        if (data.Succeed == 0 && data.Message == "该文件不存在!") {
-                            abp.message.warn(data.Message);
-                            callback && callback();
-                            return;
-                        }
-                        if (data.Succeed == 0) {
-                            abp.message.warn(data.Message);
-                        } else {
-                            callback && callback();
-                        }
-                        //console.info("删除成功:" + data);
-                    });
-            } else {
-                callback && callback();
-            }
+            callback && callback();
+            //增加秒传后，不再执行删除后台数据及文件操作
+            // if (!webuploader.isNullOrEmpty(fileToken)) {
+            //     abp.ajax({
+            //         url:webuploaderoptions.deleteServer,
+            //         data:JSON.stringify({
+            //             fileToken:fileToken
+            //         }),
+            //          headers:{
+            //              "Authorization": "Bearer " + webuploader.authorization
+            //         },
+            //         success:function(data){
+            //             if (data.Succeed == 0 && data.Message == "该文件不存在!") {
+            //                 abp.message.warn(data.Message);
+            //                 callback && callback();
+            //                 return;
+            //             }
+            //             if (data.Succeed == 0) {
+            //                 abp.message.warn(data.Message);
+            //             } else {
+            //                 callback && callback();
+            //             }
+            //         }
+            //     });
+            // } else {
+            //     callback && callback();
+            // }
         }
         //删除时执行的方法
         uploader.on('fileDequeued',
@@ -426,6 +425,10 @@ var abp = abp || {};
         uploader.on('uploadBeforeSend', function (object, data, headers) {
             $.extend(headers, {
                 "Authorization": "Bearer " + webuploader.authorization
+            });
+            $.extend(data,{
+                md5:userInfo.md5,
+                __RequestVerificationToken: $('form input[name=__RequestVerificationToken]').val()
             });
         });
         //多文件点击上传的方法
@@ -492,38 +495,12 @@ var abp = abp || {};
                 function () {
                     var $ele = $(this);
                     webuploader.imagePreviewDialog($ele);
-
-                    //var $uploadlist = $(id).parent();
-                    //var dataArray = [];
-                    //var guid = webuploader.GUID();
-
-                    //$.each($($uploadlist).find('.webupload-list-img'), function (i, v) {
-                    //    var imgSrc = $(v).find('img').attr('src');
-                    //    var title = $(v).find('.webupload-list-img-cover .img-upload-state .file-name').attr('title');
-                    //    var obj = {
-                    //        "alt": title,
-                    //        "pid": guid,
-                    //        "src": imgSrc
-                    //    };
-                    //    dataArray.push(obj);
-                    //});
-
-                    //var json = {
-                    //    "title": '上传图片',
-                    //    "id": guid,
-                    //    "start": 0,
-                    //    "data": dataArray
-                    //};
-                    //layer.photos({
-                    //    photos: json, anim: 5
-                    //});
-
                 });
         }
     }
 
     $.extend(webuploader, {
-        /*
+        /**
          * webuploader的图片预览效果
          * @param {} $ele 当前点击的图片elem
          */
@@ -534,14 +511,18 @@ var abp = abp || {};
             //var html = '<img src="' + imgSrc + '" style="width:100%;height:90%;" onerror="webuploader.show404(this);"/>';
             abp.imagePreviewDialog(imgSrc);
         },
-        /*
+        /**
          * 动态加载webuploader控件
          * @param {any} callback
          */
         getWebUpload: function (callback) {
             if (typeof WebUploader == 'undefined') {
                 var casspath = applicationPath + "/webuploader.css";
-                $("<link>").attr({ rel: "stylesheet", type: "text/css", href: casspath }).appendTo("head");
+                $("<link>").attr({
+                    rel: "stylesheet",
+                    type: "text/css",
+                    href: casspath
+                }).appendTo("head");
                 var jspath = applicationPath + "/webuploader.min.js";
                 $.getScript(jspath).done(function () {
                     callback && callback();
@@ -552,7 +533,7 @@ var abp = abp || {};
                 callback && callback();
             }
         },
-        /*
+        /**
          *  上传文件模板 
          * @param {boolean} isCheck  是否是查看界面 true/false
          * @returns {} 参数为空时，默认不是查看界面，有删除按钮。参数为true时，无删除按钮
@@ -573,7 +554,7 @@ var abp = abp || {};
                 '</div></div>';
             return template;
         },
-        /*
+        /**
          * 图片上传模板
          * @param {} isCheck 是否是查看界面 true/false
          * @returns {} 参数为空时，默认不是查看界面，有删除功能。参数为true时，无删除功能
@@ -592,7 +573,7 @@ var abp = abp || {};
             return template;
 
         },
-        /*
+        /**
          * 当图片没有时，会显示404图片
          * @param {} img 
          * @returns {} 
@@ -601,7 +582,7 @@ var abp = abp || {};
             img.src = applicationPath + "/images/404.png";
             img.onerror = null;
         },
-        /*
+        /**
          *  编辑时，加载上传控件
          * @param {Object<>} options
          *  参数  | 默认值 | 说明
@@ -694,7 +675,7 @@ var abp = abp || {};
             });
             return abpfiles;
         },
-        /*
+        /**
            * 格式化字符串
            * @param {string} "{0}-{1}","a","b"
            * @returns a-b
@@ -708,19 +689,21 @@ var abp = abp || {};
             }
             return arguments[0];
         },
-        /*
-        * 判断变量是否为null或空
-        * @example 用法:
-        * webuploader.isNullOrEmpty(null)
-        */
-        isNullOrEmpty: function (str) { return str === undefined || str === null || str === ""; },
-        /*
+        /**
+         * 判断变量是否为null或空
+         * @example 用法:
+         * webuploader.isNullOrEmpty(null)
+         */
+        isNullOrEmpty: function (str) {
+            return str === undefined || str === null || str === "";
+        },
+        /**
          * 生成一个guid数据 
          */
         GUID: function () {
             return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         },
-        /*
+        /**
          * 1024MB转换成1GB
          * @param {number} bytes 
          * @returns {} 返回最小不可转换的单位的空间大小
@@ -735,7 +718,7 @@ var abp = abp || {};
         }
     });
 
-    /*
+    /**
      * 扩展方法：得到当前控件已经上传成功的文件地址，多文件，中间以*分割
      */
     $.fn.GetFilesAddress = function () {
@@ -751,7 +734,7 @@ var abp = abp || {};
         }
         return filesAddress.join('*');
     }
-    /*
+    /**
      * 扩展方法：初始化上传文件
      * @param {Object<>} 参数为webuploader插件的所有参数
      * @param 新增参数:uploadType:'file'或'img' 上传类型：file为文件;img为图片，有上传预览效果
