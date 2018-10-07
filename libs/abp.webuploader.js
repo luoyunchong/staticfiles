@@ -25,7 +25,8 @@ var abp = abp || {};
 
     var userInfo = {
             md5: '',
-            index: ''
+            index: '',
+            fileToken:''
         },
         uploaders = {};
 
@@ -64,6 +65,7 @@ var abp = abp || {};
                     if (response.success == true) {
                         //task.reject('秒传成功');  此处会执行uploadError
                         uploaders[userInfo.index].skipFile(file);
+                        userInfo.fileToken = response.result;
                         //上传成功事件
                         if (uploaders[userInfo.index].options.uploadType === 'file') {
                             if ($('#' + $fileId + ' .webuploadstate .file-token').attr('data-filetoken') != '') {
@@ -299,7 +301,7 @@ var abp = abp || {};
         uploader.on('uploadSuccess',
             function (file, response) {
                 if (response == undefined) {
-                    opts.uploadSuccess && opts.uploadSuccess(file);
+                    opts.uploadSuccess && opts.uploadSuccess(file,userInfo.fileToken);
                     return;
                 };
                 //上传成功事件
