@@ -64,6 +64,7 @@
  
 1. webuploader 新增秒传功能，来实现文件的去重操作，后台上传后的目录调整，调整成登录名/年/月/文件名
 
+<<<<<<< HEAD
 ### 2018-10-9
 
 1. 新增pdf显示，FileController新增方法
@@ -140,3 +141,7 @@
     <canvas id="the-canvas"></canvas>
 </div>
 ~~~
+=======
+### 2018-9-30
+
+1. 解决webuploader秒传bug，多个控件加载时，md5验证多次问题

@@ -17,11 +17,11 @@ var abp = abp || {};
 (function ($, window) {
     var applicationPath = window.applicationPath === "" ? "" : window.applicationPath || "/bower_components/webuploader";
 
-    var serviceUrl = "http://localhost:61816"
-    webuploader.authorization = "GMyFTVCKRstZ0doyTQYVMTW6hprHTgRvjAIAiGATzaAsDLmj5_VO6isChVhTo6WaHKTS0fieCTINh6LYOD0KM2HFXMhns3JaFbUfXzZKWtqpxSxEYY6pk5J59CGjLxnl1QGxIhEvWCWd8fQ4gS5Zu3h5vQXZqi6wBt6GY7Yi15qr9ddV5-ynukLUYp2qqxs0p7CVeQgMAGk-ueBAi75sJhqHXWMR4KWzRzTj-r7o3f6KaWO5tpJTwlKl32zDwkp6mfKDtv9w9qP0b8IuTnJ-n0ABRua_6rdP9ngo_Jg--Ai7n-H2aChR4eaJRgLPdMAHk9OI7tIRY4pf1KkABqnrAylKRDUNiCotEOAwtlAZHwF6TZCd66L3QDyWiTkxRLY1brpofVsqoqKcqf_sMqlMJ1litLtTj47l66KKEcFWTlUPGwWNX7R7GFnL_f_4ugNmgrBoApUEWIlkVATtWMeX2F6wQYJIDhxoJ9tYgTBmZnXbBNLmRJud1qhqNafBG-UyAdflUVSy5He6wf6uiUxSKQ"
+    // var serviceUrl = "http://localhost:61816"
+    // webuploader.authorization = "GMyFTVCKRstZ0doyTQYVMTW6hprHTgRvjAIAiGATzaAsDLmj5_VO6isChVhTo6WaHKTS0fieCTINh6LYOD0KM2HFXMhns3JaFbUfXzZKWtqpxSxEYY6pk5J59CGjLxnl1QGxIhEvWCWd8fQ4gS5Zu3h5vQXZqi6wBt6GY7Yi15qr9ddV5-ynukLUYp2qqxs0p7CVeQgMAGk-ueBAi75sJhqHXWMR4KWzRzTj-r7o3f6KaWO5tpJTwlKl32zDwkp6mfKDtv9w9qP0b8IuTnJ-n0ABRua_6rdP9ngo_Jg--Ai7n-H2aChR4eaJRgLPdMAHk9OI7tIRY4pf1KkABqnrAylKRDUNiCotEOAwtlAZHwF6TZCd66L3QDyWiTkxRLY1brpofVsqoqKcqf_sMqlMJ1litLtTj47l66KKEcFWTlUPGwWNX7R7GFnL_f_4ugNmgrBoApUEWIlkVATtWMeX2F6wQYJIDhxoJ9tYgTBmZnXbBNLmRJud1qhqNafBG-UyAdflUVSy5He6wf6uiUxSKQ"
 
-    // var serviceUrl = "";
-    // webuploader.authorization = "";
+    var serviceUrl = "";
+    webuploader.authorization = "";
 
     var userInfo = {
             md5: '',
