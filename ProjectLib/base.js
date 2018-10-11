@@ -1163,6 +1163,13 @@ $.extend(com, {
                         }
                     ]
                 });
+            },
+            pdfModal: function(title,pdfName) {
+                com.dialog({
+                    title: title,
+                    href: '/File/PdfChartModal?fileToken=' + pdfName,
+                    fit:true
+                });
             }
         });
 })();
