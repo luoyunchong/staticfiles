@@ -1113,7 +1113,7 @@ $.extend(com, {
                     title: "导入",
                     width: '620',
                     height: '320',
-                    href: "/File/ImportDetailModal?excelName=" + excelName,
+                    href: "/File/ImportDetailModal?excelName=" + encodeURIComponent(excelName),
                     buttons:[ {
                         text: '确认',
                         iconCls: 'icon-ok',
@@ -1150,7 +1150,7 @@ $.extend(com, {
                     maximizable: false,
                     width: 300,
                     height: 189,
-                    href: '/File/PromptModal?promptMessage=' + promptMessage,
+                    href: '/File/PromptModal?promptMessage=' + encodeURIComponent(promptMessage),
                     buttons: [
                         {
                             text: '确定',
