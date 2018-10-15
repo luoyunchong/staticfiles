@@ -553,7 +553,7 @@ var abp = abp || {};
          */
         templateImg: function (isCheck) {
             var template = '<div id="BinduploadflieWU_FILE_{0}" class="webupload-list-img">' +
-                '<img src="' + serviceUrl + '/File/Download?fileToken={1}">' +
+                '<img src="' + serviceUrl + '/File/Download?fileToken={2}">' +
                 '<div class="webupload-list-img-cover">' +
                 '<i class="fa fa-eye img-show" title="预览" data-id="BinduploadflieWU_FILE_{0}"></i>';
             if (!isCheck) {
@@ -636,7 +636,7 @@ var abp = abp || {};
                             $(options.elem).find('.img-show').on('click',
                                 function () {
                                     var $ele = $(this);
-                                    webuploader.showImgageModal($ele);
+                                    webuploader.imagePreviewDialog($ele);
                                 });
 
                         } else {
