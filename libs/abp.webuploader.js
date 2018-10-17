@@ -55,7 +55,8 @@ var abp = abp || {};
                     type: "POST",
                     url: serviceUrl + '/File/Md5Validate',
                     data: {
-                        md5: val
+                        md5: val,
+                        fileName: file.name
                     },
                     cache: false,
                     timeout: 3000,
@@ -366,33 +367,34 @@ var abp = abp || {};
             });
 
         var deleteFile = function (fileToken, callback) {
-            callback && callback();
-            //增加秒传后，不再执行删除后台数据及文件操作
-            // if (!webuploader.isNullOrEmpty(fileToken)) {
-            //     abp.ajax({
-            //         url:webuploaderoptions.deleteServer,
-            //         data:JSON.stringify({
-            //             fileToken:fileToken
-            //         }),
-            //          headers:{
-            //              "Authorization": "Bearer " + webuploader.authorization
-            //         },
-            //         success:function(data){
-            //             if (data.Succeed == 0 && data.Message == "该文件不存在!") {
-            //                 abp.message.warn(data.Message);
-            //                 callback && callback();
-            //                 return;
-            //             }
-            //             if (data.Succeed == 0) {
-            //                 abp.message.warn(data.Message);
-            //             } else {
-            //                 callback && callback();
-            //             }
-            //         }
-            //     });
-            // } else {
-            //     callback && callback();
-            // }
+            //callback && callback();
+            // 增加秒传后，不再执行删除后台数据及文件操作
+            //2018-10-17 后台接口调整，文件md5验证和token关联存储
+             if (!webuploader.isNullOrEmpty(fileToken)) {
+                 abp.ajax({
+                     url:webuploaderoptions.deleteServer,
+                     data:JSON.stringify({
+                         fileToken:fileToken
+                     }),
+                      headers:{
+                          "Authorization": "Bearer " + webuploader.authorization
+                     },
+                     success:function(data){
+                         if (data.Succeed == 0 && data.Message == "该文件不存在!") {
+                             abp.message.warn(data.Message);
+                             callback && callback();
+                             return;
+                         }
+                         if (data.Succeed == 0) {
+                             abp.message.warn(data.Message);
+                         } else {
+                             callback && callback();
+                         }
+                     }
+                 });
+             } else {
+                 callback && callback();
+             }
         }
         //删除时执行的方法
         uploader.on('fileDequeued',
@@ -400,15 +402,12 @@ var abp = abp || {};
                 var fileToken;
                 var fileId = file.id;
                 if (target.data('uploadtype') === 'file') {
-                    fileToken = target.find("#hiddenInput" + fileId).val();
+                    fileToken = target.find("#" + fileId + ' .webuploadstate .file-token').data('filetoken');
                 } else {
                     fileToken = target.find('#' + fileId + ' .webupload-list-img-cover .img-upload-state span.file-token').attr('data-filetoken');
                 }
+                debugger
                 deleteFile(fileToken, function () {
-                    if (target.data('uploadtype') === 'file') {
-                        $("#hiddenInput" + fileId).remove();
-                    }
-
                     target.find("#" + fileId).hide(500,
                         function () {
                             $(this).remove();
