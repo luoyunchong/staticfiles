@@ -1170,6 +1170,9 @@ $.extend(com, {
                     href: '/File/PdfChartModal?fileToken=' + pdfName,
                     fit:true
                 });
+            },
+            changeCode=function(that) {
+                $(that).attr('src', '/Account/GetAuthCode?r='+com.uuid());
             }
         });
 })();
