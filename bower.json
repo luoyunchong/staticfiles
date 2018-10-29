@@ -10,8 +10,8 @@
       "基础类库"
     ],
     "license": "MIT",
-    "homepage": "http://luozq@218.94.144.229:10101/r/libs/staticfiles.git/",
-    "private": true,
+    "homepage": "https://github.com/luoyunchong/staticfiles.git",
+    "private": false    ,
     "ignore": [
       "**/.*",
       "node_modules",
