@@ -30,7 +30,7 @@
                 showCancelButton: true,
                 cancelButtonText: 'Cancel',
                 confirmButtonColor: "#DD6B55",
-                confirmButtonText: 'Yes'
+                confirmButtonText: '确认'
             }
         }
     };

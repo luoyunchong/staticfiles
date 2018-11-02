@@ -68,6 +68,30 @@ $.extend(com, {
                 grid.datagrid('deleteRow', selectIndex);
             }
         };
+        /**
+         * addnew 多行之后 若是出现删除bug，可在addnew 之后 调用  grid.datagrid('clearSelections');
+         */
+        this.deleteallrows = function () {
+            var rows = grid.datagrid('getSelections');
+            var selectRows = rows.concat();
+            if (selectRows.length) {
+                for (var i in selectRows) {
+                    if (selectRows.hasOwnProperty(i)) {
+                        var selectIndex = grid.datagrid('getRowIndex', selectRows[i]);
+                        if (selectIndex == self.editIndex) {
+                            grid.datagrid('cancelEdit', self.editIndex);
+                            self.editIndex = undefined;
+                        }
+                        grid.datagrid('deleteRow', selectIndex);
+                    }
+                }
+                grid.datagrid('clearSelections');
+                return true;
+            }
+            grid.datagrid('clearSelections');
+            return false;
+        };
+
         this.reject = function () {
             grid.datagrid('rejectChanges');
         };
@@ -338,6 +362,15 @@ $.extend(com, {
             }
         }
         return e.join("").toLowerCase();
+    },
+    loadAbp:function(data) {
+        var result;
+        if (data.__abp === true) {
+            result = data.result;
+        } else {
+            result = data;
+        }
+        return result;
     }
 });
 
@@ -351,14 +384,31 @@ $.extend(com, {
     //项目通用操作方法
     $.extend(com,
         {
-            formatMsg: function(val, objMsg) {
+            /**
+             * 
+             * @param {String} val  
+             * @param {String}      
+             * @example
+             *  val 为 ture 'true' 1 是显示文本 '是'
+             *  var objMsg = {
+                    "success": {
+                        text: "是",
+                        'case': [true, 'true', 1]
+                    },
+                    "danger": {
+                        text: "否",
+                        'case': [false, 'false', 0]
+                    }
+                }; 
+             */
+            formatMsg: function (val, objMsg) {
                 var text = "数据为空", labelClass = 'warning';
                 $.each(objMsg,
-                    function(i, v) {
+                    function (i, v) {
 
                         if (objMsg.hasOwnProperty(i)) {
                             $.each(v['case'],
-                                function(j, caseValue) {
+                                function (j, caseValue) {
                                     if (v['case'].hasOwnProperty(j)) {
                                         if (val == caseValue) {
                                             text = v.text;
@@ -371,7 +421,11 @@ $.extend(com, {
                     });
                 return $.string.format('<span class="label label-{0}">{1}</span>', labelClass, text);
             },
-            formatYes: function(value) {
+         /**
+          * 将true/false 转为文本 是/否
+          * @param {String/Int/boolean} value 
+          */
+            formatYes: function (value) {
                 var objMsg = {
                     "success": {
                         text: "是",
@@ -384,7 +438,7 @@ $.extend(com, {
                 };
                 return com.formatMsg(value, objMsg);
             },
-            formatEnable: function(value) {
+            formatEnable: function (value) {
                 var objMsg = {
                     "success": {
                         text: "启用",
@@ -397,22 +451,25 @@ $.extend(com, {
                 };
                 return com.formatMsg(value, objMsg);
             },
-            dialog: function(options) {
+            dialog: function (options) {
                 var query = $, fnClose = options.onClose;
                 var uuid = 'dd' + com.uuid();
                 var opts = $.extend({
-                        modal: true,
-                        id: uuid,
-                        cache: true,
-                        collapsible: true,
-                        maximizable: true,
-                        html: '',
-                        url: '',
-                        viewModel: query.noop
-                    },
+                    modal: true,
+                    id: uuid,
+                    cache: true,
+                    collapsible: true,
+                    maximizable: true,
+                    html: '',
+                    url: '',
+                    viewModel: query.noop,
+                    onLoadError: function () {
+                        abp.message.warn("发生了异常的错误，请尝试重新打开!");
+                    }
+                },
                     options);
 
-                opts.onClose = function() {
+                opts.onClose = function () {
                     if (query.isFunction(fnClose)) fnClose();
                     query(this).dialog('destroy');
                 };
@@ -424,11 +481,11 @@ $.extend(com, {
 
                 var win = query('<div></div>').appendTo('body').html(opts.html);
                 if (opts.url)
-                    query.ajax({ async: false, url: opts.url, success: function(d) { win.empty().html(d); } });
+                    query.ajax({ async: false, url: opts.url, success: function (d) { win.empty().html(d); } });
                 var closeBtns = {
                     text: '关闭',
                     iconCls: 'icon-cancel',
-                    handler: function() {
+                    handler: function () {
                         $('#' + uuid).dialog('close');
                     }
                 };
@@ -447,7 +504,7 @@ $.extend(com, {
                 }
 
                 win.dialog(opts);
-                query.parser.onComplete = function() {
+                query.parser.onComplete = function () {
                     opts.viewModel(win);
                     query.parser.onComplete = query.noop;
                 };
@@ -457,14 +514,14 @@ $.extend(com, {
             /**
              * 将dialog的按钮置为禁用或者启用，防止多次提交
              */
-            setBusy: function(dialogModal, isOn) {
+            setBusy: function (dialogModal, isOn) {
                 if (isOn) {
                     dialogModal.parent().find(".dialog-button").hide();
                 } else {
                     dialogModal.parent().find(".dialog-button").show();
                 }
             },
-            filter: function(formElement, gridElemnt, paramsOrCallback) {
+            filter: function (formElement, gridElemnt, paramsOrCallback) {
                 var data = $(formElement).formSerialize();
                 if (typeof (paramsOrCallback) == "object") {
                     if (!!paramsOrCallback) {
@@ -488,7 +545,7 @@ $.extend(com, {
                     grid.treegrid('reload');
                 }
             },
-            refreshTab: function(title) {
+            refreshTab: function (title) {
                 if (title == undefined || title == "") {
                     var currentTab = top.$('#centerTabs').tabs('getSelected');
                     var url = $($(currentTab.panel('options')).attr('content')).attr('src');
@@ -509,7 +566,7 @@ $.extend(com, {
                         options: tab.panel('options')
                     });
             },
-            createTab: function(node) {
+            createTab: function (node) {
                 var text = node.text;
                 var url = node.attributes.url;
                 if (top.$('#centerTabs').tabs("exists", text)) {
@@ -520,9 +577,9 @@ $.extend(com, {
                         text: '页面加载中....',
                         interval: 100
                     });
-                    window.setTimeout(function() {
-                            $.messager.progress('close');
-                        },
+                    window.setTimeout(function () {
+                        $.messager.progress('close');
+                    },
                         1000);
                     top.$('#centerTabs').tabs('add',
                         {
@@ -536,26 +593,38 @@ $.extend(com, {
             /**
              * 关闭当前的tabs
              */
-            closeCurrentTab: function() {
+            closeCurrentTab: function () {
                 var tab = top.$('#centerTabs').tabs('getSelected'); //获取当前选中tabs  
                 var index = top.$('#centerTabs').tabs('getTabIndex', tab); //获取当前选中tabs的index  
                 top.$('#centerTabs').tabs('close', index); //关闭对应index的tabs  
             },
             /**
              * 编辑前统一提示信息,当Id为0时，说明未选中任何记录，其他时，将Id,作为回调函数的参数
-             * @param {elementId} element '#dgGrid'
-             * @param {} callback 回调函数 function(id){} id为当前选中的id
+             * @param {String} element '#dgGrid'
+             * @param {Function} callback 回调函数 function(id){} id为当前选中的id;node:当前数据记录
              * @returns {} 
              */
-            edit: function(element, callback) {
-                var id = com.getSelectId(element);
-                if (!id) {
+            edit: function (element, callback) {
+                if (!element) {
+                    element = '#dgGrid';
+                }
+                var $grid = $(element);
+                var node = $grid.datagrid('getSelected');
+                if (!node) {
                     abp.message.warn('在操作之前，请先选中一条记录！');
                 } else {
-                    callback(id);
+                    callback(node.Id, node);
                 }
             },
-            deleted: function(backendService, element, message) {
+            /**
+             * 
+             * @param {} backendService 后台abp接口服务
+             * @param {String}  element 要操作的列表id
+             * @param {String}  message 自定义删除提示信息（默认为"您确认删除这条记录吗?”）
+             * @param {String}  deleteService 后台删除方法名（默认为"delete")
+             * @returns {} 
+             */
+            deleted: function (backendService, element, message, deleteService) {
                 var id = 0;
                 if (!element) {
                     element = '#dgGrid';
@@ -564,6 +633,9 @@ $.extend(com, {
                 if (!message) {
                     message = '您确认删除这条记录吗?';
                 }
+                if (!deleteService) {
+                    deleteService = "delete";
+                }
                 var showMessage = $.string.format(template, message);
                 id = com.getSelectId(element);
                 if (!id) {
@@ -571,9 +643,9 @@ $.extend(com, {
                 } else {
                     abp.message.confirm(showMessage,
                         '系统提示',
-                        function(r) {
+                        function (r) {
                             if (r) {
-                                backendService.delete(id).done(function() {
+                                backendService[deleteService](id).done(function () {
                                     abp.message.success('删除成功');
                                     com.btnRefresh(element);
                                 });
@@ -581,7 +653,11 @@ $.extend(com, {
                         });
                 }
             },
-            getSelectId: function(element) {
+            /**
+             * 
+             * @param {} element 
+             */
+            getSelectId: function (element) {
                 if (!element) {
                     element = '#dgGrid';
                 }
@@ -593,7 +669,7 @@ $.extend(com, {
                 }
                 return id;
             },
-            btnRefresh: function(element) {
+            btnRefresh: function (element) {
                 if (!element) {
                     element = '#dgGrid';
                 }
@@ -604,7 +680,7 @@ $.extend(com, {
                     $grid.treegrid('load').treegrid('unselectAll');
                 }
             },
-            setForm: function(id, callback, isLoad, url, pDialog) {
+            setForm: function (id, callback, isLoad, url, pDialog) {
                 if (id == undefined) {
                     id = 0;
                 }
@@ -625,7 +701,7 @@ $.extend(com, {
                 abp.ajax(
                     {
                         url: url,
-                        success: function(data) {
+                        success: function (data) {
                             if (isLoad === true) {
                                 elemForm.form('load', data);
                             }
@@ -634,24 +710,24 @@ $.extend(com, {
                         showLoading: false
                     });
             },
-            depJsTree: function(opts) {
+            depJsTree: function (opts) {
                 var depService = abp.services.app.organizationUnit;
                 return depService.getComBoTreeJson(false,
                     {
                         showLoading: false
-                    }).done(function(dataJson) {
-                    opts.data = dataJson;
-                    $('#depTree').tree(opts);
-                });
+                    }).done(function (dataJson) {
+                        opts.data = dataJson;
+                        $('#depTree').tree(opts);
+                    });
             },
-            nofind: function(img) {
+            nofind: function (img) {
                 img.src = "/Content/images/user.png";
-                img.onerror = null; //如果错误图片也不存在就会死循环一直跳，所以要设置成null，也可以不加
+                img.onerror = null; //如果错误图片也不存在就会死循环一直跳
             },
-            loadSwithButton: function(pDialog, data) {
+            loadSwithButton: function (pDialog, data) {
                 var switchArray = pDialog.find('#editForm').find('input.easyui-switchbutton.switchbutton-f');
                 $.each(switchArray,
-                    function(i, v) {
+                    function (i, v) {
                         var id = $(v).attr('id');
                         if (data && data.hasOwnProperty(id)) {
                             pDialog.find('#' + id)
@@ -659,7 +735,7 @@ $.extend(com, {
                         }
                     });
             },
-            loadCityPicker: function(e, province, city, district) {
+            loadCityPicker: function (e, province, city, district) {
                 if (province) {
                     e.citypicker({
                         province: province,
@@ -684,10 +760,10 @@ $.extend(com, {
                 result = result.substring(0, result.length - 1);
                 return result;
             },
-            loadCheckBox: function(element, data) {
+            loadCheckBox: function (element, data) {
                 var checkboxArray = $(element).find('input.easyui-checkbox');
                 $.each(checkboxArray,
-                    function(i, v) {
+                    function (i, v) {
                         var id = $(v).attr('id');
                         if (data && data.hasOwnProperty(id)) {
                             $(element).find('#' + id)
@@ -695,7 +771,7 @@ $.extend(com, {
                         }
                     });
             },
-            selectIcon: function(formId) {
+            selectIcon: function (formId) {
                 com.dialog({
                     id: "select-icon",
                     title: '选取图标',
@@ -711,7 +787,7 @@ $.extend(com, {
              * @param {} paramsOrCallback 额外的参数或者回调函数
              * @returns {} 
              */
-            clear: function(formElement, gridElement, paramsOrCallback) {
+            clear: function (formElement, gridElement, paramsOrCallback) {
                 com.clearById("Id", formElement, gridElement, paramsOrCallback);
             },
             /**
@@ -722,7 +798,7 @@ $.extend(com, {
             * @param {} paramsOrCallback 
             * @returns {} 
             */
-            clearById: function(id, formElement, gridElement, paramsOrCallback) {
+            clearById: function (id, formElement, gridElement, paramsOrCallback) {
 
                 var grid = $(gridElement);
                 $(formElement).form('clear');
@@ -771,11 +847,11 @@ $.extend(com, {
                  ];
                       toolbar = com.authorizeButton(toolbar);
                  */
-            authorizeButton: function(toolbar) {
+            authorizeButton: function (toolbar) {
                 var grantedPermissions = abp.auth.grantedPermissions;
                 var newToolbar = [];
                 if (grantedPermissions && toolbar && toolbar.length > 0) {
-                    newToolbar = toolbar.filter(function(v) {
+                    newToolbar = toolbar.filter(function (v) {
                         var hasPermssion = grantedPermissions[v.EnCode];
                         return v.EnCode == undefined || grantedPermissions[v.EnCode];
                     });
@@ -787,17 +863,28 @@ $.extend(com, {
                * @param {} dom jquery对象
                * @example   com.ignoreEle($('#editForm'));
                */
-            ignoreEle: function(dom) {
+            ignoreEle: function (dom) {
                 /**
-                 * 删除除关闭外的其他按钮
-                 */
-                dom.next('.dialog-button').find('a').each(function(r) {
+               * 删除除关闭外的其他按钮
+               */
+                dom.find('.dialog-button,.datagrid-toolbar').find('a').each(function (r) {
+                    if ($(this).text().trim() != '关闭') {
+                        $(this).remove();
+                    }
+                });
+                dom.find('button.btn').each(function (r) {
+                    if ($(this).text().trim() != '关闭') {
+                        $(this).remove();
+                    }
+                });
+                
+                dom.parent().parent().find('.dialog-button').find('a').each(function (r) {
                     if ($(this).text().trim() != '关闭') {
                         $(this).remove();
                     }
                 });
 
-                dom.find('input,select,textarea').not('input[type=hidden]').each(function(r) {
+                dom.find('input,select,textarea').not('input[type=hidden]').each(function (r) {
                     var $this = $(this);
                     var name = $this.attr('id');
                     try {
@@ -806,51 +893,41 @@ $.extend(com, {
                     }
 
                     switch (true) {
-                    case $this.is("[class*=easyui-textbox]"):
-                        $this.textbox('disable');
-                        break;
-                    case $this.is("[class*=easyui-switchbutton]"):
-                        $this.switchbutton('disable');
-                        break;
-                    case $this.is("[class*=easyui-combobox]"):
-                        $this.combo('disable');
-                        break;
+                        case $this.is("[class*=easyui-textbox]"):
+                            $this.textbox('disable');
+                            break;
+                        case $this.is("[class*=easyui-switchbutton]"):
+                            $this.switchbutton('disable');
+                            break;
+                        case $this.is("[class*=easyui-combobox]"):
+                            $this.combo('disable');
+                            break;
 
-                    case $this.is("[class*=easyui-numberbox]"):
-                        $this.numberbox('disable');
-                        break;
-                    default:
-                        $this.css('border', 'none');
-                        $this.attr('readonly', 'readonly');
-                        break;
+                        case $this.is("[class*=easyui-numberbox]"):
+                            $this.numberbox('disable');
+                            break;
+                        default:
+                            $this.css('border', 'none');
+                            $this.attr('disabled', 'disabled');
+                            $this.attr('readonly', 'readonly');
+                            break;
                     }
                 });
             },
             /**
-             * 判断val是否是手机号
-             * @param {string} val 手机号 
-             * @returns {boolean} true/false 是手机号:true;不是正确的手机号:false 
+             * 以Post形式打开新页面,可传递参数
+             * @param {string}url 
+             * @param {Object}formData 
              */
-            isPhone: function(val) {
-                if (val === '' || val == undefined) return false;
-                //手机号正则  
-                var phoneReg = /^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$/;
-                //电话  
-                var phone = $.trim(val);
-                if (!phoneReg.test(phone)) {
-                    return false;
-                }
-                return true;
-            },
-            openPostWindow: function(url, formData) {
+            openPostWindow: function (url, formData) {
 
                 var tempForm = document.createElement("form");
                 tempForm.id = "tempForm1";
                 tempForm.method = "post";
                 tempForm.action = url;
-                tempForm.target = "_blank"; //打开新页面
+                tempForm.target = "_blank"; 
                 $.each(formData,
-                    function(i, v) {
+                    function (i, v) {
                         var hideInput1 = document.createElement("input");
                         hideInput1.type = "hidden";
                         hideInput1.name = i; //后台要接受这个参数来取值
@@ -858,9 +935,9 @@ $.extend(com, {
                         tempForm.appendChild(hideInput1);
                     });
                 if (document.all) {
-                    tempForm.attachEvent("onsubmit", function() {}); //IE
+                    tempForm.attachEvent("onsubmit", function () { }); //IE
                 } else {
-                    var subObj = tempForm.addEventListener("submit", function() {}, false); //firefox
+                    var subObj = tempForm.addEventListener("submit", function () { }, false); //firefox
                 }
                 document.body.appendChild(tempForm);
                 if (document.all) {
@@ -875,7 +952,7 @@ $.extend(com, {
              * 得到IE浏览器的版本号
              * @returns {string} 7/8/9/10/6/edge/11/-1  -1非ie浏览器 
              */
-            IEVersion: function() {
+            IEVersion: function () {
                 var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
                 var isIe = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器  
                 var isEdge = userAgent.indexOf("Edge") > -1 && !isIe; //判断是否IE的Edge浏览器  
@@ -903,15 +980,15 @@ $.extend(com, {
                     return -1; //不是ie浏览器
                 }
             },
-            formatCombobox: function(value, key) {
+            formatCombobox: function (value, key) {
                 var objSpan = {};
                 $.each(com[key],
-                    function(i, v) {
+                    function (i, v) {
                         objSpan[v.id] = v.text;
                     });
                 return objSpan[value];
             },
-            formatDate: function(value, row) {
+            formatDate: function (value, row) {
                 if (value != null && value != "") {
                     return value.split(' ')[0];
                 } else {
@@ -924,15 +1001,24 @@ $.extend(com, {
             accept: {
                 excel: {
                     title: 'excel',
-                    extensions: 'xls,xlsx',
-                    mimeTypes:
-                        'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    extensions: 'xls,xlsx,csv',
+                    mimeTypes: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.csv'
+                },
+                txt: {
+                    title: 'txt',
+                    extensions: 'txt',
+                    mimeTypes: 'text/plain'
+                },
+                spss: {
+                    title: 'spss',
+                    extensions: 'sav',
+                    mimeTypes: '.sav'
                 }
             },
-            enumsToCombox: function(data) {
+            enumsToCombox: function (data) {
                 var dataArray = [];
                 $.each(data,
-                    function(i, v) {
+                    function (i, v) {
                         dataArray.push({
                             id: v.id,
                             text: v.text
@@ -941,7 +1027,186 @@ $.extend(com, {
                 return dataArray;
             },
             guid: {
-                empty:"00000000-0000-0000-0000-000000000000"
+                empty: "00000000-0000-0000-0000-000000000000"
+            },
+            /**
+             * 将表格导出成excel
+             * @param {string} elemId 表格选择器
+             * @param {string} newName 导出的新表格名称
+             */
+            exportExcel: function (elemId, newName) {
+                if (newName == undefined) {
+                    newName = com.uuid();
+                }
+                $(elemId).table2excel({
+                    name: newName,
+                    exclude: '.noExl',
+                    filename: newName,
+                    exclude_img: true,
+                    exclude_links: true,
+                    exclude_inputs: true
+                });
+            },
+            /**
+             * 将表格导出成word
+             * @param {string} tableElem 表格选择器
+             * @param {string} newFileName 导出的excel的文件名
+             */
+            exportWord: function (tableElem, newFileName) {
+                var style = '<style>table{ width:100%;text-align:center;}\
+                table, th, td\
+                {\
+                    border: 1px solid blue;\
+                }\
+                table\
+                {\
+                    border-collapse: collapse;\
+                }\
+                table, th, td\
+                {\
+                    border: 1px solid black;\
+                }' +
+                    '.layui-layer-content { padding: 30px; }\
+                    .table > thead: first-child > tr: first-child > td { border-top: 1px solid #d0d0d0; border-bottom: 1px solid #d0d0d0; }\
+                .table > tbody > tr > td, .table > thead > tr > td { padding: 12px; border-left: 1px solid #d0d0d0; border-top: 1px solid #d0d0d0; }\
+                .table: last-child { border-left: none; border-right: 1px solid #d0d0d0; }\
+                .table > tbody > tr.border-bottom > td { border-bottom: 1px solid #d0d0d0; }\
+                .table > thead > tr { background-color: #d4ebf1; font-weight: bold; }\
+                .table-head { padding-right: 17px; color: #000; }\
+                .table-body { width: 100%; height: 394px;}\
+                .table-head table, .table-body table { width: 100 %; }</style> ';
+
+                var tempRows = "";
+
+                $(tableElem +'>tbody>tr,'+tableElem+'>thead>tr').not('.noExl').each(function (i, p) {
+                    tempRows += "<tr>";
+                    $(p).children("td,th").not('.noExl').each(function (i, q) {
+                        var rc = {
+                            rows: $(this).attr("rowspan"),
+                            cols: $(this).attr("colspan"),
+                            flag: $(q).find('.noExl')
+                        };
+
+                        if (rc.flag.length > 0) {
+                            tempRows += "<td> </td>"; // exclude it!!
+                        } else {
+                            if (rc.rows & rc.cols) {
+                                tempRows += "<td>" + $(q).html() + "</td>";
+                            } else {
+                                tempRows += "<td";
+                                if (rc.rows > 0) {
+                                    tempRows += " rowspan=\'" + rc.rows + "\' ";
+                                }
+                                if (rc.cols > 0) {
+                                    tempRows += " colspan=\'" + rc.cols + "\' ";
+                                }
+                                tempRows += "/>" + $(q).html() + "</td>";
+                            }
+                        }
+                    });
+                    tempRows += "</tr>";
+                });
+
+                com.openPostWindow('/File/ExportDoc',
+                    {
+                        tableHtml: style + "<table>" + tempRows+"</table>",
+                        newFileName: newFileName
+                    });
+            },
+            exportGrid: function (dgGridId, isAll) {
+                var opts = $(dgGridId).datagrid('options');
+                if (isAll == undefined) { isAll = true; }
+                var eventData = $.fn.datagrid.extensions.parseContextMenuEventData($(dgGridId), opts, null);
+                $.messager.progress();
+                setTimeout(function () {
+                    $.messager.progress('close');
+                },
+                    1000);
+                $('#searchForm').form('submit', {
+                    url: opts.exportUrl,
+                    onSubmit: function (param) {
+                        param.page = eventData.page;
+                        param.rows = eventData.pageSize;
+                        param.sort = eventData.sort;
+                        param.order = eventData.order;
+                        param.isAll = isAll;
+                    },
+                    success: function () {
+                    }
+                });
+                //alert("导出" + (isAll ? "全部" : "当前页") + "数据");
+            },
+            /**
+             * 导入excel文件
+             * @param {string} excelName excel的文件名无后缀
+             * @param {string} importUrl 导入文件的后台地址
+             */
+            btnImport: function(excelName, importUrl) {
+              var pDialog=  com.dialog({
+                    title: "导入",
+                    width: '620',
+                    height: '320',
+                    href: "/File/ImportDetailModal?excelName=" + encodeURIComponent(excelName),
+                    buttons:[ {
+                        text: '确认',
+                        iconCls: 'icon-ok',
+                        handler: function () {
+                            var fileToken = GetFilesAddress();
+                            if (fileToken == "") {
+                               abp.message.warn('请先选择导入的文件！');
+                                return;
+                            }
+                            com.setBusy(pDialog, true);
+                            abp.ajax({
+                                url: importUrl,
+                                data: JSON.stringify({
+                                    fileToken: fileToken
+                                })
+                            }).done(function (d) {
+                                com.filter('#searchForm', '#dgGrid');
+                                abp.message.success(d);
+                                com.setBusy(pDialog, false);
+                                pDialog.dialog('close');
+                            });
+                        }
+                    }]
+                });
+            },
+            /**
+             * 填写单个提示信息，增加表单验证功能 
+             */
+            prompt: function (promptMessage, okCallback) {
+                var pDialog = com.dialog({
+                    title: '提示信息',
+                    cls:'prompt-center',
+                    minimizable: false,
+                    maximizable: false,
+                    width: 300,
+                    height: 189,
+                    href: '/File/PromptModal?promptMessage=' + encodeURIComponent(promptMessage),
+                    buttons: [
+                        {
+                            text: '确定',
+                            iconCls: 'icon-ok',
+                            handler: function () {
+                                var valid = pDialog.find('form').form('validate');
+                                if (!valid) return false;
+                                okCallback && okCallback(pDialog);
+                            }
+                        }
+                    ]
+                });
+            },
+            pdfModal: function(title,pdfName) {
+                com.dialog({
+                    title: title,
+                    href: '/File/PdfChartModal?fileToken=' + pdfName,
+                    fit:true
+                });
+            },
+            
+            changeCode=function(that) {
+                $(that).attr('src', '/Account/GetAuthCode?r='+com.uuid());
             }
         });
 })();

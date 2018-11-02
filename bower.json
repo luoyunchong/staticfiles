@@ -1,5 +1,6 @@
 {
     "name": "staticfile",
+    "version": "0.0.1",
     "authors": [
       "IGeekFan"
     ],
@@ -9,13 +10,14 @@
       "基础类库"
     ],
     "license": "MIT",
-    "homepage": "http://218.94.144.229:10101/summary/libs%2Fstaticfiles.git",
-    "private": true,
+    "homepage": "https://github.com/luoyunchong/staticfiles.git",
+    "private": false    ,
     "ignore": [
       "**/.*",
       "node_modules",
       "bower_components",
       "test",
-      "tests"
+      "tests",
+      "plugins"
     ]
   }

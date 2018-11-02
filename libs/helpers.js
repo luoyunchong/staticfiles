@@ -1,7 +1,7 @@
 ﻿var app = app || {};
 (function () {
+    var appLocalizationSource = abp.localization.getSource(abp.projectName);
 
-    var appLocalizationSource = abp.localization.getSource('CargoDockingPlatform');
     app.localize = function () {
         return appLocalizationSource.apply(this, arguments);
     };
@@ -11,6 +11,9 @@
     };
 
     app.downloadFile = function (file) {
+        if (file.newName == undefined) {
+            file.newName = "";
+        }
         location.href = "/File/Download?fileToken=" + file.fileToken+ '&newName=' + file.newName;
     }
     

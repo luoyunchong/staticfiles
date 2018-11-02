@@ -4,7 +4,7 @@ var abpLayer;
     if (!top.layer || !$) {
         return;
     }
-    abpLayer = top.layui.layer;
+    abpLayer = top.layer;
     abp.libs = abp.libs || {};
     abp.libs.layuiAlert = {
         config: {
@@ -101,6 +101,40 @@ var abpLayer;
             abpLayer.confirm(message, opts, yes, cancel);
         });
     };
+
+    abp.imagePreviewDialog = function (imgSrc) {
+        var img = new Image();
+        img.src = imgSrc;      
+        img.onload = function () {
+
+            var width = img.width, height = img.height;
+            var w = window;
+            if (top != window) {
+                w = top;
+            }
+            var windowHeight = $(w).height();
+            var windowWidth = $(w).width();
+            if (height > windowHeight) {
+                height = windowHeight;
+            }
+            if (width > windowWidth) {
+                width = windowWidth;
+            }
+
+            w.layer.open({
+                type: 1,
+                anim: 1,
+                title: false,
+                shadeClose: true,
+                area: [width + 'px', height + 'px'], //宽高
+                content: '<div style=""><img src="' + imgSrc + '" style="width:100%;height:90%;" onerror="webuploader.show404(this);"/></div>'
+            });
+        };
+        img.onerror = function () {
+            layer.msg('图片已不存在！');
+        };
+    };
+
 
     abp.event.on('abp.dynamicScriptsInitialized', function () {
         abp.libs.layuiAlert.config.confirm.title = '您确认执行该操作吗?';

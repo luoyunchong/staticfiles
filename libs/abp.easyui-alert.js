@@ -33,8 +33,6 @@
         }
     };
 
-    /* MESSAGE **************************************************/
-
     var showMessage = function (type, message, title) {
         if (!title) {
             title = '系统提示';
@@ -69,6 +67,57 @@
     abp.message.error = function (message, title) {
         return showMessage('error', message, title);
     };
+
+    abp.message.show=function(message, title) {
+        if (!title) {
+            title = '系统提示';
+        }
+        // 消息将显示在顶部中间
+        $.messager.show({
+            title:title,
+            msg:message,
+            showType:'slide'
+        });
+
+    }
+
+    abp.imagePreviewDialog = function (imgSrc) {
+    
+        var html = '<div><img src="' + imgSrc + '" style="width:100%;height:90%;" onerror="webuploader.show404(this);"/></div>';
+        // 图片地址
+        // 创建对象
+        var img = new Image();
+        // 改变图片的src
+        img.src = imgSrc;
+        // 判断是否有缓存
+        if (img.complete) {
+
+            top.com.dialog({
+                width: img.width,
+                height: img.height+80,
+                html: html
+            });
+        } else {
+            // 加载完成执行
+            img.onload = function () {
+                top.com.dialog({
+                    title: '查看图片',
+                    width: img.width,
+                    height: img.height + 80,
+                    html: html
+                });
+            };
+        }
+    };
+
+    abp.message.showErrorPage=function(content){
+        com.dialog({
+            title:'错误提示',
+            width:'100%',
+            height:'100%',
+            content:content
+        });
+    }
 
     abp.message.confirm = function (message, titleOrCallback, callback) {
         var userOpts = {
