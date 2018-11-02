@@ -14,3 +14,9 @@
 
 ```git push origin -–tags```
 
+
+> 文档生成
+* jsdoc
+~~~
+npm install -g jsdoc
+~~~

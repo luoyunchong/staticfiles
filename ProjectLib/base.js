@@ -384,6 +384,23 @@ $.extend(com, {
     //项目通用操作方法
     $.extend(com,
         {
+            /**
+             * 
+             * @param {String} val  
+             * @param {String}      
+             * @example
+             *  val 为 ture 'true' 1 是显示文本 '是'
+             *  var objMsg = {
+                    "success": {
+                        text: "是",
+                        'case': [true, 'true', 1]
+                    },
+                    "danger": {
+                        text: "否",
+                        'case': [false, 'false', 0]
+                    }
+                }; 
+             */
             formatMsg: function (val, objMsg) {
                 var text = "数据为空", labelClass = 'warning';
                 $.each(objMsg,
@@ -404,6 +421,10 @@ $.extend(com, {
                     });
                 return $.string.format('<span class="label label-{0}">{1}</span>', labelClass, text);
             },
+         /**
+          * 将true/false 转为文本 是/否
+          * @param {String/Int/boolean} value 
+          */
             formatYes: function (value) {
                 var objMsg = {
                     "success": {
@@ -579,8 +600,8 @@ $.extend(com, {
             },
             /**
              * 编辑前统一提示信息,当Id为0时，说明未选中任何记录，其他时，将Id,作为回调函数的参数
-             * @param {elementId} element '#dgGrid'
-             * @param {} callback 回调函数 function(id){} id为当前选中的id;node:当前数据记录
+             * @param {String} element '#dgGrid'
+             * @param {Function} callback 回调函数 function(id){} id为当前选中的id;node:当前数据记录
              * @returns {} 
              */
             edit: function (element, callback) {
@@ -595,6 +616,14 @@ $.extend(com, {
                     callback(node.Id, node);
                 }
             },
+            /**
+             * 
+             * @param {} backendService 后台abp接口服务
+             * @param {String}  element 要操作的列表id
+             * @param {String}  message 自定义删除提示信息（默认为"您确认删除这条记录吗?”）
+             * @param {String}  deleteService 后台删除方法名（默认为"delete")
+             * @returns {} 
+             */
             deleted: function (backendService, element, message, deleteService) {
                 var id = 0;
                 if (!element) {
@@ -624,6 +653,10 @@ $.extend(com, {
                         });
                 }
             },
+            /**
+             * 
+             * @param {} element 
+             */
             getSelectId: function (element) {
                 if (!element) {
                     element = '#dgGrid';
@@ -1171,6 +1204,7 @@ $.extend(com, {
                     fit:true
                 });
             },
+            
             changeCode=function(that) {
                 $(that).attr('src', '/Account/GetAuthCode?r='+com.uuid());
             }
