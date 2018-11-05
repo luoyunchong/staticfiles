@@ -178,10 +178,11 @@
                 if (data.success === true) {
                     //然后弹出成功操作的提示
                     if (userOptions.showMsg) {
+                        var msgToShow = "";
                         if (data.result == null || typeof (data.result) == "number") {
-                            data.result = "操作成功!";
+                            msgToShow = "操作成功!";
                         }
-                        abp.message.success(data.result, '提示');
+                        abp.message.success(msgToShow, '提示');
                     }
 
                     if (data.targetUrl) {

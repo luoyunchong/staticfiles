@@ -1140,32 +1140,44 @@ $.extend(com, {
              * 导入excel文件
              * @param {string} excelName excel的文件名无后缀
              * @param {string} importUrl 导入文件的后台地址
+             * @param {Object}extendParams 上传文件时，增加其他参数传递
+             * @param {function} callback 上传成功后，点击确认按钮的回调事件
              */
-            btnImport: function(excelName, importUrl) {
-              var pDialog=  com.dialog({
+            btnImport: function (excelName, importUrl, extendParams,callback) {
+                var pDialog = com.dialog({
                     title: "导入",
                     width: '620',
                     height: '320',
                     href: "/File/ImportDetailModal?excelName=" + encodeURIComponent(excelName),
-                    buttons:[ {
+                    buttons: [{
                         text: '确认',
                         iconCls: 'icon-ok',
                         handler: function () {
                             var fileToken = GetFilesAddress();
                             if (fileToken == "") {
-                               abp.message.warn('请先选择导入的文件！');
+                                abp.message.warn('请先选择导入的文件！');
                                 return;
                             }
                             com.setBusy(pDialog, true);
+                            var params = {};
+                            if (extendParams != undefined) {
+                                params = $.extend(extendParams,
+                                    {
+                                        fileToken: fileToken
+                                    });
+                            } else {
+                                params = {
+                                    fileToken: fileToken
+                                }
+                            }
                             abp.ajax({
                                 url: importUrl,
-                                data: JSON.stringify({
-                                    fileToken: fileToken
-                                })
+                                data: JSON.stringify(params)
                             }).done(function (d) {
-                                com.filter('#searchForm', '#dgGrid');
                                 abp.message.success(d);
                                 com.setBusy(pDialog, false);
+                                callback && callback();
+                                com.filter('#searchForm', '#dgGrid');
                                 pDialog.dialog('close');
                             });
                         }
@@ -1174,6 +1186,8 @@ $.extend(com, {
             },
             /**
              * 填写单个提示信息，增加表单验证功能 
+             * @param {string} promptMessage  提示信息
+             * @param {function} okCallback 确定时的回调事件
              */
             prompt: function (promptMessage, okCallback) {
                 var pDialog = com.dialog({
@@ -1197,6 +1211,11 @@ $.extend(com, {
                     ]
                 });
             },
+            /**
+             * 弹出显示pdf的框
+             * @param {string} title 标题
+             * @param {string} pdfName pdf的token，即后台存的文件名
+             */
             pdfModal: function(title,pdfName) {
                 com.dialog({
                     title: title,
@@ -1204,7 +1223,11 @@ $.extend(com, {
                     fit:true
                 });
             },
-            
+            /**
+             * 修改验证码
+             * @param {element} that 当前图片对象
+             * @example <img src="/Account/GetAuthCode"  title="单击可刷新" alt="单击可刷新" onclick="com.changeCode(this);" />
+             */
             changeCode=function(that) {
                 $(that).attr('src', '/Account/GetAuthCode?r='+com.uuid());
             }
