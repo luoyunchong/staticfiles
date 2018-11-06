@@ -1,4 +1,4 @@
-## libs、开发者日志[]
+## libs、开发者日志
 
 ### 生成新的tag 并推送到服务器上
 
@@ -26,6 +26,12 @@ git push origin -–tags
 * 官方文档　[http://usejsdoc.org/](http://usejsdoc.org/)
 
 1.  JSDoc安装
+
 ~~~
  npm install -g jsdoc
 ~~~
+
+
+### docsify 文档生成
+
+
