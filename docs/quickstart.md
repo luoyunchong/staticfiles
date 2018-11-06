@@ -34,13 +34,13 @@
     bower install staticfiles --save
 ~~~
 或安装扩展和更新（Package Installer)
-![image](../images/1.png)
+![image](images/1.png)
 
 右击WEB项目 <br>
-![image](../images/2.png)
+![image](images/2.png)
 
 输入staticfiles<br>
-![image](../images/3.png)
+![image](images/3.png)
 
 最后点击install 即可安装从223.2.193.13安装staticfiles仓库的js，此文件夹中的相关介绍
 * easyui.default-extension.js为easyui增加默认属性，扩展jquery方法
