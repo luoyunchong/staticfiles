@@ -34,4 +34,10 @@ git push origin -–tags
 
 ### docsify 文档生成
 
+* 相关博客 [https://segmentfault.com/a/1190000007656679?_ea=1416350](https://segmentfault.com/a/1190000007656679?_ea=1416350)
+* 文档地址[https://docsify.js.org/#/zh-cn/quickstart](https://docsify.js.org/#/zh-cn/quickstart)
+
+### 开发者文档
+* [https://luoyunchong.github.io/staticfiles/#/](https://luoyunchong.github.io/staticfiles/#/)
+
 
