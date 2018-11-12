@@ -1,25 +1,47 @@
 {
-	"tags"      : {
-		"allowUnknownTags" : true
-	},
-	"plugins"   : ["plugins/markdown"],
-	"templates" : {
-		"cleverLinks"     : false,
-		"monospaceLinks"  : false,
-		"default"         : {
-			"outputSourceFiles" : true
-		},
-		"systemName"      : "DocStrap",
-		"footer"          : "",
-		"copyright"       : "DocStrap Copyright © 2012-2013 The contributors to the JSDoc3 and DocStrap projects.",
-		"navType"         : "vertical",
-		"theme"           : "cerulean",
-		"linenums"        : true,
-		"collapseSymbols" : false,
-		"inverseNav"      : true
-	},
-	"markdown"  : {
-		"parser"   : "gfm",
-		"hardwrap" : true
-	}
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "include": ["ProjectLib","Chat","libs","others"],		//JavaScript ??(??)??
+        "exclude": ["src/core", "src/ui"],      //? include ????????(??)
+        "includePattern": ".+\\.(js|es)$"       //???????????
+    },
+    "plugins": ["plugins/markdown"],            //??markdown ??
+    "markdown": {
+        "tags": ["file"],             //???????????
+        "excludeTags": ["author"],  //?????????
+        "parser": "gfm",            //gfm
+        "hardwrap": true            //????
+    },
+    "templates": {  //???????? DocStrap ?????
+        //"logoFile": "images/logo.png",        //logo ????
+        "cleverLinks": false,
+        "monospaceLinks": false,
+        "dateFormat": "ddd MMM Do YYYY",        //?????????????
+        "outputSourceFiles": true,              //????????
+        "outputSourcePath": true,               //????????
+        "systemName": "Common Modules",         //????
+        "footer": "",                           //????
+        "copyright": "https://lzw.me.",         //??????
+        "navType": "vertical",                    //vertical ? inline
+        //docstrap ????????: cosmo, cyborg, flatly, journal, lumen, paper,
+        //readable, sandstone, simplex, slate, spacelab, superhero, united, yeti
+        "theme": "cosmo",
+        "linenums": true,                       //??????
+        "collapseSymbols": false,               //?????????
+        "inverseNav": true,                     //?????? bootstrap ? inverse header
+        "protocol": "html://",                  //???????????
+        "methodHeadingReturns": true            //method ?????????????
+    },
+    //?????????????????
+    //????????: jsdoc -c jsdoc-conf.json ??
+    "opts": {
+        //"template": "templates/default",      //?? JSDoc ????
+        "template": "./node_modules/ink-docstrap/template", //?? docstrap ??
+        "destination": "./docs/",               //???????? -d ./out/
+        "recurse": true,                        //??????? -r
+        "debug": true,                          //???????--debug
+        "readme": "README.md"                   //???????? readme ???-R README.md
+    }
 }

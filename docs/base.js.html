@@ -1,4 +1,76 @@
-﻿/**
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Common Modules Source: base.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cosmo.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Common Modules</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#accept">accept</a></li><li><a href="global.html#authorizeButton">authorizeButton</a></li><li><a href="global.html#baseUrl">baseUrl</a></li><li><a href="global.html#btnImport">btnImport</a></li><li><a href="global.html#changeCode">changeCode</a></li><li><a href="global.html#clear">clear</a></li><li><a href="global.html#clearById">clearById</a></li><li><a href="global.html#closeCurrentTab">closeCurrentTab</a></li><li><a href="global.html#config">config</a></li><li><a href="global.html#deleteallrows">deleteallrows</a></li><li><a href="global.html#deleted">deleted</a></li><li><a href="global.html#edit">edit</a></li><li><a href="global.html#EditGridViewModel">EditGridViewModel</a></li><li><a href="global.html#EditTreeGridViewModel">EditTreeGridViewModel</a></li><li><a href="global.html#exportExcel">exportExcel</a></li><li><a href="global.html#exportWord">exportWord</a></li><li><a href="global.html#formatMsg">formatMsg</a></li><li><a href="global.html#formatYes">formatYes</a></li><li><a href="global.html#getSelectId">getSelectId</a></li><li><a href="global.html#IEVersion">IEVersion</a></li><li><a href="global.html#ignoreEle">ignoreEle</a></li><li><a href="global.html#openPostWindow">openPostWindow</a></li><li><a href="global.html#pdfModal">pdfModal</a></li><li><a href="global.html#prompt">prompt</a></li><li><a href="global.html#scrollTo">scrollTo</a></li><li><a href="global.html#search">search</a></li><li><a href="global.html#setBusy">setBusy</a></li><li><a href="global.html#showChildren">showChildren</a></li><li><a href="global.html#toTreeData">toTreeData</a></li><li><a href="global.html#uuid">uuid</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: base.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">﻿/**
 * 模块名：基础脚本
 * 程序名: 项目方法封装函数
 **/
@@ -25,7 +97,7 @@ $.extend(com, {
     /**
      * datagrid行内编辑封装
      * @param {element} grid $('#dgGrid')
-     * @returns {Object<>} 当前对象实例 
+     * @returns {Object&lt;>} 当前对象实例 
      */
     EditGridViewModel: function (grid) {
         var self = this;
@@ -112,7 +184,7 @@ $.extend(com, {
             return changes;
         };
         this.isChangedAndValid = function () {
-            return self.ended() && self.getChanges()._changed;
+            return self.ended() &amp;&amp; self.getChanges()._changed;
         };
         this.isValid = function () {
             return self.ended();
@@ -188,7 +260,7 @@ $.extend(com, {
             return changes;
         };
         this.isChangedAndValid = function () {
-            return self.ended() && self.getChanges()._changed;
+            return self.ended() &amp;&amp; self.getChanges()._changed;
         };
     },
     /** 
@@ -201,13 +273,13 @@ $.extend(com, {
     */
     toTreeData: function (a, idStr, pidStr, childrenStr) {
         var r = [], hash = {}, len = (a || []).length;
-        for (var i = 0; i < len; i++) {
+        for (var i = 0; i &lt; len; i++) {
             hash[a[i][idStr]] = a[i];
         }
-        for (var j = 0; j < len; j++) {
+        for (var j = 0; j &lt; len; j++) {
             var aVal = a[j], hashVP = hash[aVal[pidStr]];
             if (hashVP) {
-                !hashVP[childrenStr] && (hashVP[childrenStr] = []);
+                !hashVP[childrenStr] &amp;&amp; (hashVP[childrenStr] = []);
                 hashVP[childrenStr].push(aVal);
             } else {
                 r.push(aVal);
@@ -252,7 +324,7 @@ $.extend(com, {
             return v1.toString() === v2.toString();
         }
 
-        if (v1 instanceof Object && v2 instanceof Object) {
+        if (v1 instanceof Object &amp;&amp; v2 instanceof Object) {
             if (countProps(v1) !== countProps(v2)) {
                 return false;
             }
@@ -337,7 +409,7 @@ $.extend(com, {
                 }
             }
             else if (typeof sourcePropertyName === 'string') {
-                if ((obj[newPropertyName] && overWrite) || (!obj[newPropertyName]))
+                if ((obj[newPropertyName] &amp;&amp; overWrite) || (!obj[newPropertyName]))
                     obj[newPropertyName] = obj[sourcePropertyName];
             }
         }
@@ -356,9 +428,9 @@ $.extend(com, {
         var g;
         e[8] = e[13] = e[18] = e[23] = "-";
         e[14] = "4";
-        for (var c = 0; c < 36; c++) {
+        for (var c = 0; c &lt; 36; c++) {
             if (!e[c]) {
-                g = 0 | d() * 16; e[c] = h[(c == 19) ? (g & 3) | 8 : g & 15];
+                g = 0 | d() * 16; e[c] = h[(c == 19) ? (g &amp; 3) | 8 : g &amp; 15];
             }
         }
         return e.join("").toLowerCase();
@@ -377,7 +449,7 @@ $.extend(com, {
 (function () {
 
     function newIframe(url) {
-        var ifrStr = "<iframe src='" + url + "' frameborder=0 style='width:100%;height:99%;border:0' ></iframe>";
+        var ifrStr = "&lt;iframe src='" + url + "' frameborder=0 style='width:100%;height:99%;border:0' >&lt;/iframe>";
         return ifrStr;
     }
 
@@ -419,7 +491,7 @@ $.extend(com, {
                                 });
                         }
                     });
-                return $.string.format('<span class="label label-{0}">{1}</span>', labelClass, text);
+                return $.string.format('&lt;span class="label label-{0}">{1}&lt;/span>', labelClass, text);
             },
          /**
           * 将true/false 转为文本 是/否
@@ -479,7 +551,7 @@ $.extend(com, {
                 else if (/^\#.*\-template$/.test(opts.html))
                     opts.html = $(opts.html).html();
 
-                var win = query('<div></div>').appendTo('body').html(opts.html);
+                var win = query('&lt;div>&lt;/div>').appendTo('body').html(opts.html);
                 if (opts.url)
                     query.ajax({ async: false, url: opts.url, success: function (d) { win.empty().html(d); } });
                 var closeBtns = {
@@ -489,7 +561,7 @@ $.extend(com, {
                         $('#' + uuid).dialog('close');
                     }
                 };
-                if (opts.buttons && opts.buttons.length > 0) {
+                if (opts.buttons &amp;&amp; opts.buttons.length > 0) {
                     opts.buttons.push(closeBtns);
                 } else {
                     opts.buttons = [closeBtns];
@@ -629,7 +701,7 @@ $.extend(com, {
                 if (!element) {
                     element = '#dgGrid';
                 }
-                var template = '<span style="font-weight:bold;">{0}</span>';
+                var template = '&lt;span style="font-weight:bold;">{0}&lt;/span>';
                 if (!message) {
                     message = '您确认删除这条记录吗?';
                 }
@@ -705,7 +777,7 @@ $.extend(com, {
                             if (isLoad === true) {
                                 elemForm.form('load', data);
                             }
-                            callback && callback(data);
+                            callback &amp;&amp; callback(data);
                         },
                         showLoading: false
                     });
@@ -729,7 +801,7 @@ $.extend(com, {
                 $.each(switchArray,
                     function (i, v) {
                         var id = $(v).attr('id');
-                        if (data && data.hasOwnProperty(id)) {
+                        if (data &amp;&amp; data.hasOwnProperty(id)) {
                             pDialog.find('#' + id)
                                 .switchbutton((data[id] === true || data[id] === 1) ? 'check' : 'uncheck');
                         }
@@ -749,10 +821,10 @@ $.extend(com, {
             },
             formatAddress: function (row, arrayData) {
                 var result = '';
-                if (arrayData && arrayData.length > 0) {
+                if (arrayData &amp;&amp; arrayData.length > 0) {
                     $.each(arrayData,
                         function (i, v) {
-                            if (v != null && v != "") {
+                            if (v != null &amp;&amp; v != "") {
                                 result += row[v] + "-";
                             }
                         });
@@ -765,7 +837,7 @@ $.extend(com, {
                 $.each(checkboxArray,
                     function (i, v) {
                         var id = $(v).attr('id');
-                        if (data && data.hasOwnProperty(id)) {
+                        if (data &amp;&amp; data.hasOwnProperty(id)) {
                             $(element).find('#' + id)
                                 .checkbox((data[id] === true || data[id] === 1) ? 'check' : 'uncheck');
                         }
@@ -850,7 +922,7 @@ $.extend(com, {
             authorizeButton: function (toolbar) {
                 var grantedPermissions = abp.auth.grantedPermissions;
                 var newToolbar = [];
-                if (grantedPermissions && toolbar && toolbar.length > 0) {
+                if (grantedPermissions &amp;&amp; toolbar &amp;&amp; toolbar.length > 0) {
                     newToolbar = toolbar.filter(function (v) {
                         var hasPermssion = grantedPermissions[v.EnCode];
                         return v.EnCode == undefined || grantedPermissions[v.EnCode];
@@ -958,9 +1030,9 @@ $.extend(com, {
              */
             IEVersion: function () {
                 var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
-                var isIe = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器  
-                var isEdge = userAgent.indexOf("Edge") > -1 && !isIe; //判断是否IE的Edge浏览器  
-                var isIe11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
+                var isIe = userAgent.indexOf("compatible") > -1 &amp;&amp; userAgent.indexOf("MSIE") > -1; //判断是否IE&lt;11浏览器  
+                var isEdge = userAgent.indexOf("Edge") > -1 &amp;&amp; !isIe; //判断是否IE的Edge浏览器  
+                var isIe11 = userAgent.indexOf('Trident') > -1 &amp;&amp; userAgent.indexOf("rv:11.0") > -1;
                 if (isIe) {
                     var reIe = new RegExp("MSIE (\\d+\\.\\d+);");
                     reIe.test(userAgent);
@@ -974,7 +1046,7 @@ $.extend(com, {
                     } else if (fIeVersion == 10) {
                         return 10;
                     } else {
-                        return 6; //IE版本<=7
+                        return 6; //IE版本&lt;=7
                     }
                 } else if (isEdge) {
                     return 'edge'; //edge
@@ -993,7 +1065,7 @@ $.extend(com, {
                 return objSpan[value];
             },
             formatDate: function (value, row) {
-                if (value != null && value != "") {
+                if (value != null &amp;&amp; value != "") {
                     return value.split(' ')[0];
                 } else {
                     return "";
@@ -1057,7 +1129,7 @@ $.extend(com, {
              * @param {string} newFileName 导出的excel的文件名
              */
             exportWord: function (tableElem, newFileName) {
-                var style = '<style>table{ width:100%;text-align:center;}\
+                var style = '&lt;style>table{ width:100%;text-align:center;}\
                 table, th, td\
                 {\
                     border: 1px solid blue;\
@@ -1078,12 +1150,12 @@ $.extend(com, {
                 .table > thead > tr { background-color: #d4ebf1; font-weight: bold; }\
                 .table-head { padding-right: 17px; color: #000; }\
                 .table-body { width: 100%; height: 394px;}\
-                .table-head table, .table-body table { width: 100 %; }</style> ';
+                .table-head table, .table-body table { width: 100 %; }&lt;/style> ';
 
                 var tempRows = "";
 
                 $(tableElem +'>tbody>tr,'+tableElem+'>thead>tr').not('.noExl').each(function (i, p) {
-                    tempRows += "<tr>";
+                    tempRows += "&lt;tr>";
                     $(p).children("td,th").not('.noExl').each(function (i, q) {
                         var rc = {
                             rows: $(this).attr("rowspan"),
@@ -1092,28 +1164,28 @@ $.extend(com, {
                         };
 
                         if (rc.flag.length > 0) {
-                            tempRows += "<td> </td>"; // exclude it!!
+                            tempRows += "&lt;td> &lt;/td>"; // exclude it!!
                         } else {
-                            if (rc.rows & rc.cols) {
-                                tempRows += "<td>" + $(q).html() + "</td>";
+                            if (rc.rows &amp; rc.cols) {
+                                tempRows += "&lt;td>" + $(q).html() + "&lt;/td>";
                             } else {
-                                tempRows += "<td";
+                                tempRows += "&lt;td";
                                 if (rc.rows > 0) {
                                     tempRows += " rowspan=\'" + rc.rows + "\' ";
                                 }
                                 if (rc.cols > 0) {
                                     tempRows += " colspan=\'" + rc.cols + "\' ";
                                 }
-                                tempRows += "/>" + $(q).html() + "</td>";
+                                tempRows += "/>" + $(q).html() + "&lt;/td>";
                             }
                         }
                     });
-                    tempRows += "</tr>";
+                    tempRows += "&lt;/tr>";
                 });
 
                 com.openPostWindow('/File/ExportDoc',
                     {
-                        tableHtml: style + "<table>" + tempRows+"</table>",
+                        tableHtml: style + "&lt;table>" + tempRows+"&lt;/table>",
                         newFileName: newFileName
                     });
             },
@@ -1180,7 +1252,7 @@ $.extend(com, {
                             }).done(function (d) {
                                 abp.message.success(d);
                                 com.setBusy(pDialog, false);
-                                callback && callback();
+                                callback &amp;&amp; callback();
                                 com.filter('#searchForm', '#dgGrid');
                                 pDialog.dialog('close');
                             });
@@ -1209,7 +1281,7 @@ $.extend(com, {
                             handler: function () {
                                 var valid = pDialog.find('form').form('validate');
                                 if (!valid) return false;
-                                okCallback && okCallback(pDialog);
+                                okCallback &amp;&amp; okCallback(pDialog);
                             }
                         }
                     ]
@@ -1230,10 +1302,146 @@ $.extend(com, {
             /**
              * 修改验证码
              * @param {element} that 当前图片对象
-             * @example <img src="/Account/GetAuthCode"  title="单击可刷新" alt="单击可刷新" onclick="com.changeCode(this);" />
+             * @example &lt;img src="/Account/GetAuthCode"  title="单击可刷新" alt="单击可刷新" onclick="com.changeCode(this);" />
              */
             changeCode:function(that) {
                 $(that).attr('src', '/Account/GetAuthCode?r='+com.uuid());
             }
         });
-})();
+})();</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	https://lzw.me.
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	
+		on Mon Nov 12th 2018
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

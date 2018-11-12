@@ -1,2 +1,3 @@
 /.gitignore
 /*.txt
+/node_modules

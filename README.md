@@ -31,6 +31,15 @@ git push origin -–tags
  npm install -g jsdoc
 ~~~
 
+2.  安装 Docstrap
+~~~
+npm i ink-docstrap
+~~~
+3. 生成项目 API 文档：
+~~~~
+jsdoc -c .\configs\jsdoc.conf.json
+~~~~
+
 
 ### docsify 文档生成
 
