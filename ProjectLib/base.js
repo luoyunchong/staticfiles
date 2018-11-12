@@ -858,31 +858,35 @@ $.extend(com, {
                 }
                 return newToolbar;
             },
-            /**
+             /**
                * 去除表单中所有按钮,并且将所有文本框置为禁用
                * @param {} dom jquery对象
+               * @param {Boolean} hasButton
                * @example   com.ignoreEle($('#editForm'));
                */
-            ignoreEle: function (dom) {
-                /**
-               * 删除除关闭外的其他按钮
-               */
-                dom.find('.dialog-button,.datagrid-toolbar').find('a').each(function (r) {
-                    if ($(this).text().trim() != '关闭') {
-                        $(this).remove();
-                    }
-                });
-                dom.find('button.btn').each(function (r) {
-                    if ($(this).text().trim() != '关闭') {
-                        $(this).remove();
-                    }
-                });
-                
-                dom.parent().parent().find('.dialog-button').find('a').each(function (r) {
-                    if ($(this).text().trim() != '关闭') {
-                        $(this).remove();
-                    }
-                });
+              ignoreEle: function (dom, hasButton) {
+                if (hasButton == undefined||hasButton==false) {
+
+                 /**
+                   * 删除除关闭外的其他按钮
+                   */
+                    dom.find('.dialog-button,.datagrid-toolbar').find('a').each(function (r) {
+                        if ($(this).text().trim() != '关闭') {
+                            $(this).remove();
+                        }
+                    });
+                    dom.find('button.btn').each(function (r) {
+                        if ($(this).text().trim() != '关闭') {
+                            $(this).remove();
+                        }
+                    });
+
+                    dom.parent().parent().find('.dialog-button').find('a').each(function (r) {
+                        if ($(this).text().trim() != '关闭') {
+                            $(this).remove();
+                        }
+                    });
+                }
 
                 dom.find('input,select,textarea').not('input[type=hidden]').each(function (r) {
                     var $this = $(this);

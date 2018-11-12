@@ -34,6 +34,12 @@
                     if (arguments[0].status == 403) {
                         abp.message.warn("您无权访问此方法", '系统提示');
                     }
+                    if (arguments[0].status == 500) {
+                        if (arguments[0].responseJSON) {
+                            var json = arguments[0].responseJSON.error;
+                            abp.message.warn(json.message);
+                        }
+                    }
                 }
             });
 
@@ -98,7 +104,7 @@
             },
             //param是参数名
             //selector是该参数的选择器,重写remote时根据选择器取到参数值
-            //validType="remote['<%=path%>/group/validCode','code',{'param':'id"','selector':'#id'},'编码不唯一']"
+            //validType="remote['/group/validCode','code',{'param':'id"','selector':'#id'},'编码不唯一']"
             remote: {
                 validator: function (value, param) {
                     if (!value) {
