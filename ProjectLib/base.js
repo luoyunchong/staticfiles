@@ -384,6 +384,45 @@ $.extend(com, {
     //项目通用操作方法
     $.extend(com,
         {
+            status: {
+                tempSave: 0,
+                submit: 1,
+                release: 2,
+                audited: 3,
+                notPassAudited: 4,
+                'defriend': 5,
+                deleted: 6,
+                enable: 7,
+                forbidden: 8
+            },
+            statusCombox: [{
+                id: '0',
+                text: '暂存'
+            }, {
+                id: '1',
+                text: '已提交'
+            }, {
+                id: '2',
+                text: '发布'
+            }, {
+                id: '3',
+                text: '审核通过'
+            }, {
+                id: '4',
+                text: '审核不通过'
+            }, {
+                id: '5',
+                text: '拉黑'
+            }, {
+                id: '6',
+                text: '删除'
+            }, {
+                id: '7',
+                text: '启用'
+            }, {
+                id: '8',
+                text: '禁用'
+            }],
             /**
              * 
              * @param {String} val  
@@ -450,6 +489,24 @@ $.extend(com, {
                     }
                 };
                 return com.formatMsg(value, objMsg);
+            },
+            formatStatus: function (value) {
+                var status = com.statusCombox;
+                var labelClass = ['success', "danger", "default", "primary", "info","warning"];
+                var i = 0;
+                var objMsg = {};
+                while (i < status.length) {
+                    if (objMsg[labelClass[i % 6]] != undefined) {
+                        objMsg[labelClass[i % 6]].case.push(status[i].id);
+                    } else {
+                        objMsg[labelClass[i % 6]] = {
+                            'text': status[i].text,
+                            'case': [status[i].id]
+                        };
+                    }
+                    i++;
+                }
+                return com.formatMsg(value+"", objMsg);
             },
             dialog: function (options) {
                 var query = $, fnClose = options.onClose;
