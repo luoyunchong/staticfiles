@@ -18,6 +18,10 @@
       "bower_components",
       "test",
       "tests",
-      "plugins"
+      "plugins",
+      "docs",
+      "configs",
+      "_config.yml",
+      "package-lock.json"
     ]
   }
