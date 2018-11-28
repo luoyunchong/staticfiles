@@ -1236,10 +1236,11 @@ $.extend(com, {
                                 data: JSON.stringify(params)
                             }).done(function (d) {
                                 abp.message.success(d);
-                                com.setBusy(pDialog, false);
                                 callback && callback();
                                 com.filter('#searchForm', '#dgGrid');
                                 pDialog.dialog('close');
+                            }).always(function () {
+                                com.setBusy(pDialog, false);
                             });
                         }
                     }]
