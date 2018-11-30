@@ -8,8 +8,8 @@ var com = com || {};
 
 $.extend(com, {
     /**
-      * @returns {boolean} 调试或发布状态
-      */
+     * 调试或发布状态
+     */
     config: {
         isDebug: true
     },
@@ -191,14 +191,15 @@ $.extend(com, {
             return self.ended() && self.getChanges()._changed;
         };
     },
-    /** 
+   /** 
     * json格式转树状结构 
-    * @param   {json}      json数据 
-    * @param   {String}    id的字符串 
-    * @param   {String}    父id的字符串 
-    * @param   {String}    children的字符串 
-    * @return  {Array}     数组 
     */
+   
+    // * @param   {json}    json数据 
+    // * @param   {String}  id的字符串 
+    // * @param   {String}  父id的字符串 
+    // * @param   {String}  children的字符串 
+    // * @return  {Array}   数组 
     toTreeData: function (a, idStr, pidStr, childrenStr) {
         var r = [], hash = {}, len = (a || []).length;
         for (var i = 0; i < len; i++) {
@@ -426,7 +427,7 @@ $.extend(com, {
             /**
              * 
              * @param {String} val  
-             * @param {String}      
+             * @param {String} objMsg
              * @example
              *  val 为 ture 'true' 1 是显示文本 '是'
              *  var objMsg = {
