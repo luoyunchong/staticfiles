@@ -48,6 +48,6 @@ jsdoc -c .\configs\jsdoc.conf.json
 * 文档地址[https://docsify.js.org/#/zh-cn/quickstart](https://docsify.js.org/#/zh-cn/quickstart)
 
 ### 开发者文档
-* 其他说明 [https://luoyunchong.github.io/staticfiles/docsify/#/](https://luoyunchong.github.io/staticfiles/docsify/#/
+* 其他说明 [https://luoyunchong.github.io/staticfiles/docsify/#/](https://luoyunchong.github.io/staticfiles/docsify/#/)
 * 文档API [https://luoyunchong.github.io/staticfiles/](https://luoyunchong.github.io/staticfiles/)
 
