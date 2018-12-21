@@ -544,7 +544,7 @@ $.extend(com, {
                     text: '关闭',
                     iconCls: 'icon-cancel',
                     handler: function () {
-                        $('#' + uuid).dialog('close');
+                        $('#' + opts.id).dialog('close');
                     }
                 };
                 if (opts.buttons && opts.buttons.length > 0) {
