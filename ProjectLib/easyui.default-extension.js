@@ -327,7 +327,10 @@ $.fn.formSerialize = function () {
         var $this = $(this);
         var id = $this.attr('id');
         if (id == undefined || id.indexOf("_easyui_textbox_input") !== -1 || $this.hasClass('hiddenInput')) {
-            return;
+            id = $this.attr('radioboxname');
+            if (id == undefined) {
+                return;
+            }
         }
         switch (true) {
             case $this.is("[class*=easyui-switchbutton]"):
@@ -349,7 +352,7 @@ $.fn.formSerialize = function () {
                     postdata[id] = $this.combotree('getValue');
                 }
                 break;
-            case $this.is("[class*=easyui-checkbox]"):
+            case $this.is("[class*=checkbox-f]"):
                 postdata[id] = $this.checkbox('isCheck');
                 break;
             case $this.is("[class*=combobox-f]"):

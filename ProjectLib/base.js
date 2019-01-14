@@ -819,7 +819,7 @@ $.extend(com, {
                 return result;
             },
             loadCheckBox: function (element, data) {
-                var checkboxArray = $(element).find('input.easyui-checkbox');
+                var checkboxArray = $(element).find('input.checkbox-f');
                 $.each(checkboxArray,
                     function (i, v) {
                         var id = $(v).attr('id');

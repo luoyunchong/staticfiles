@@ -16,14 +16,14 @@
 ## 前端维护
 项目使用bower管理前端类库，staticfiles为该项目通用js
  * 维护地址为 hhttps://github.com/luoyunchong/staticfiles.git
- * bower 静态资源地址 http://223.2.193.13:5678/
+ * bower 静态资源地址 http://223.2.193.15:5678/
  * staticfiles文件中Readme.md写了一些文档，用于介绍其功能的开发日志
 
 >根目录新建.bowerrc文件，实现自定义bower仓库
 
 ~~~
 {
-    "registry": "http://223.2.193.13:5678",
+    "registry": "http://223.2.193.15:5678",
     "timeout": 30000
 }
 ~~~

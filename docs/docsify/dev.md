@@ -21,3 +21,7 @@
 ### 2018-10-12
 
 1. 解决IE下地址中有中文问题encodeURIComponent编码一下，即可解决
+
+### 2019-1-13
+
+1. fix formSerialize() checkbox 、radiobox 值的获取 
