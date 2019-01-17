@@ -96,6 +96,7 @@ $.extend(com, {
             grid.datagrid('rejectChanges');
         };
         this.accept = function () {
+            grid.datagrid('clearSelections');
             grid.datagrid('acceptChanges');
             var rows = grid.datagrid('getRows');
             for (var i in rows) delete rows[i]._isnew;
