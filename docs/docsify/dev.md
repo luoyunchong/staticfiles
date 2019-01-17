@@ -25,3 +25,8 @@
 ### 2019-1-13
 
 1. fix formSerialize() checkbox 、radiobox 值的获取 
+
+
+### 2019-1-17
+
+1. add 一些基础的格式化数据，增加审核流程列表统一提示

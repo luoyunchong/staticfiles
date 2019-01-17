@@ -492,22 +492,48 @@ $.extend(com, {
                 return com.formatMsg(value, objMsg);
             },
             formatStatus: function (value) {
-                var status = com.statusCombox;
-                var labelClass = ['success', "danger", "default", "primary", "info","warning"];
-                var i = 0;
-                var objMsg = {};
-                while (i < status.length) {
-                    if (objMsg[labelClass[i % 6]] != undefined) {
-                        objMsg[labelClass[i % 6]].case.push(status[i].id);
-                    } else {
-                        objMsg[labelClass[i % 6]] = {
-                            'text': status[i].text,
-                            'case': [status[i].id]
-                        };
+                var labelClass = ['success', "danger", "default", "primary", "info", "warning"];
+                //var i = 0;
+                //var objMsg = {};
+                //debugger;
+                //while (i < com.statusCombox.length) {
+                //    if (objMsg[labelClass[i % 6]] != undefined) {
+                //        objMsg[labelClass[i % 6]].case.push(com.statusCombox[i].id);
+                //    } else {
+                //        objMsg[labelClass[i % 6]] = {
+                //            'text': com.statusCombox[i].text,
+                //            'case': [com.statusCombox[i].id]
+                //        };
+                //    }
+                //    i++;
+                //}
+
+                var classes = labelClass[value % 6];
+                var text=com.statusCombox[value].text
+
+                return $.string.format('<span class="label label-{0}">{1}</span>', classes, text);
+            },
+            formatDetails: function (value, row) {
+                return String.format('<button class="btn btn-default btn-xs" title="查看详情" type="button" onclick="gridUI.btnDetails(\'{0}\')"><i class="fa fa-search"></i></button>', value);
+            },
+            formatRed(value) {
+                return $.string.format('<span style="font-weight: bold;color: red;">{0}</span>', value);
+            },
+            btnAuditLogs: function (guid) {
+                 com.dialog({
+                    title: '审核历史',
+                    width: 500,
+                    height: 400,
+                    href: '/BackReason/Index',
+                    onLoad: function () {
+                        backReasonUI.loadGrid(guid);
                     }
-                    i++;
-                }
-                return com.formatMsg(value+"", objMsg);
+                });
+            },
+            formatAuditLogs: function (value, row) {
+                return com.formatDetails(value, row) +
+                    String.format(
+                        '&nbsp;<button class="btn btn-default btn-xs" title="查看审核历史" type="button" onclick="com.btnAuditLogs(\'{0}\')">查看审核历史</button>', row.BackGuid);
             },
             dialog: function (options) {
                 var query = $, fnClose = options.onClose;
@@ -919,7 +945,7 @@ $.extend(com, {
              /**
                * 去除表单中所有按钮,并且将所有文本框置为禁用
                * @param {} dom jquery对象
-               * @param {Boolean} hasButton
+               * @param {Boolean} hasButton 是否保存按钮
                * @example   com.ignoreEle($('#editForm'));
                */
               ignoreEle: function (dom, hasButton) {
