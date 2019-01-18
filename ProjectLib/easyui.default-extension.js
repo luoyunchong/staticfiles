@@ -22,11 +22,12 @@
                 pagination: true,
                 pageSize: 15,
                 pageList: [15, 30, 45, 60],
-                onBeforeLoad: function () {
+                onOpen: function () {
                     $('#searchForm').keydown(function (e) {
                         if (e.which === 13) {
                             e.preventDefault();
                             com.filter('#searchForm', '#dgGrid');
+                            return false;
                         }
                     });
                 },
@@ -71,6 +72,15 @@
                     if (arguments[0].status == 403) {
                         abp.message.warn("您无权访问此方法", '系统提示');
                     }
+                },
+                onOpen: function () {
+                    $('#searchForm').keydown(function (e) {
+                        if (e.which === 13) {
+                            e.preventDefault();
+                            com.filter('#searchForm', '#dgGrid');
+                            return false;
+                        }
+                    });
                 }
             });
 

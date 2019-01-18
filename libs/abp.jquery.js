@@ -67,7 +67,7 @@
                     }
                     abp.ajax.handleNonAbpErrorResponse(jqXhr, userOptions, $dfd);
                 }).always(function () {
-                    if ($.messager) {
+                    if (options.showLoading === true&&$.messager) {
                         $.messager.progress('close');
                     }
                 });
