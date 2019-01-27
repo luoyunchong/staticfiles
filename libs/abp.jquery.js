@@ -49,7 +49,6 @@
                         userOptions.success && userOptions.success(data);
                     }
                 }).fail(function (jqXhr) {
-                    $.messager.progress('close');
                     if (jqXhr.responseJSON && jqXhr.responseJSON.__abp) {
                         abp.ajax.handleResponse(jqXhr.responseJSON, userOptions, $dfd, jqXhr);
                         return;

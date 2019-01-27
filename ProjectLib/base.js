@@ -425,6 +425,7 @@ $.extend(com, {
                 id: '8',
                 text: '禁用'
             }],
+            labelClass: ['danger', "success", "default", "primary", "info", "warning"],
             /**
              * 
              * @param {String} val  
@@ -493,26 +494,7 @@ $.extend(com, {
                 return com.formatMsg(value, objMsg);
             },
             formatStatus: function (value) {
-                var labelClass = ['success', "danger", "default", "primary", "info", "warning"];
-                //var i = 0;
-                //var objMsg = {};
-                //debugger;
-                //while (i < com.statusCombox.length) {
-                //    if (objMsg[labelClass[i % 6]] != undefined) {
-                //        objMsg[labelClass[i % 6]].case.push(com.statusCombox[i].id);
-                //    } else {
-                //        objMsg[labelClass[i % 6]] = {
-                //            'text': com.statusCombox[i].text,
-                //            'case': [com.statusCombox[i].id]
-                //        };
-                //    }
-                //    i++;
-                //}
-
-                var classes = labelClass[value % 6];
-                var text=com.statusCombox[value].text
-
-                return $.string.format('<span class="label label-{0}">{1}</span>', classes, text);
+                return $.string.format('<span class="label label-{0}">{1}</span>', com.labelClass[value % 6], com.statusCombox[value].text);
             },
             formatDetails: function (value, row) {
                 return String.format('<button class="btn btn-default btn-xs" title="查看详情" type="button" onclick="gridUI.btnDetails(\'{0}\')"><i class="fa fa-search"></i></button>', value);
@@ -533,8 +515,7 @@ $.extend(com, {
             },
             formatAuditLogs: function (value, row) {
                 return com.formatDetails(value, row) +
-                    String.format(
-                        '&nbsp;<button class="btn btn-default btn-xs" title="查看审核历史" type="button" onclick="com.btnAuditLogs(\'{0}\')">查看审核历史</button>', row.BackGuid);
+                    String.format('&nbsp;<button class="btn btn-default btn-xs" title="查看审核历史" type="button" onclick="com.btnAuditLogs(\'{0}\')">查看审核历史</button>', row.BackGuid);
             },
             dialog: function (options) {
                 var query = $, fnClose = options.onClose;
