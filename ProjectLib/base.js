@@ -7,8 +7,8 @@
 var com = com || {};
 
 $.extend(com, {
-    /**
-     * 调试或发布状态
+   /**
+     * @returns {boolean} 调试或发布状态
      */
     config: {
         isDebug: true
@@ -494,13 +494,24 @@ $.extend(com, {
                 return com.formatMsg(value, objMsg);
             },
             formatStatus: function (value) {
-                return $.string.format('<span class="label label-{0}">{1}</span>', com.labelClass[value % 6], com.statusCombox[value].text);
+                return $.string.format('<span class="label label-{0}">{1}</span>', com.labelClass[value % com.labelClass.length], com.statusCombox[value].text);
             },
             formatDetails: function (value, row) {
                 return String.format('<button class="btn btn-default btn-xs" title="查看详情" type="button" onclick="gridUI.btnDetails(\'{0}\')"><i class="fa fa-search"></i></button>', value);
             },
             formatRed(value) {
                 return $.string.format('<span style="font-weight: bold;color: red;">{0}</span>', value);
+            },
+            convertStatusToCombobox: function (statusText) {
+                var arr = [];
+                $.each(statusText,
+                    function (i, v) {
+                        arr.push({
+                            id: i,
+                            text: v
+                        });
+                    });
+                return arr;
             },
             btnAuditLogs: function (guid) {
                  com.dialog({
@@ -1183,16 +1194,24 @@ $.extend(com, {
                         newFileName: newFileName
                     });
             },
-            exportGrid: function (dgGridId, isAll) {
+            exportGrid: function (dgGridId, queryParams, elemDocument) {
                 var opts = $(dgGridId).datagrid('options');
-                if (isAll == undefined) { isAll = true; }
+                var isAll = false;
+                if (queryParams == true || queryParams.isAll == true) {
+                    isAll = true;
+                }
+
                 var eventData = $.fn.datagrid.extensions.parseContextMenuEventData($(dgGridId), opts, null);
                 $.messager.progress();
                 setTimeout(function () {
                     $.messager.progress('close');
-                },
-                    1000);
-                $('#searchForm').form('submit', {
+                }, 1000);
+
+                if (elemDocument == undefined || elemDocument == '') {
+                    elemDocument = '#searchForm';
+                }
+
+                $(elemDocument).form('submit', {
                     url: opts.exportUrl,
                     onSubmit: function (param) {
                         param.page = eventData.page;
@@ -1200,6 +1219,7 @@ $.extend(com, {
                         param.sort = eventData.sort;
                         param.order = eventData.order;
                         param.isAll = isAll;
+                        $.extend(param, queryParams);
                     },
                     success: function () {
                     }
