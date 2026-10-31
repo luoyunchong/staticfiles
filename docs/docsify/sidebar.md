@@ -7,3 +7,5 @@
   * [日常问题解答](question.md)
     * [PdfChartModal](PdfChartModal.md)
     * [prompt.md](prompt.md)
+
+* [English documentation](README.en.md)
