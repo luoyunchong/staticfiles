@@ -19,7 +19,7 @@ git push origin 0.0.6
 3. Push all local tags to the Git server at once:
 
 ```
-git push origin -–tags
+git push origin --tags
 ```
 
 ### Generate documentation
