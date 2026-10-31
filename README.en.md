@@ -55,3 +55,5 @@ jsdoc -c .\configs\jsdoc.conf.json
 
 - [Additional notes](https://luoyunchong.github.io/staticfiles/docsify/#/)
 - [API documentation](https://luoyunchong.github.io/staticfiles/)
+
+- [English project guides](./docs/docsify/README.en.md)
