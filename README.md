@@ -1,6 +1,10 @@
 **English** | [简体中文](README.zh-CN.md)
 
+<a name="libs开发者日志"></a>
+
 ## Libraries and developer notes
+
+<a name="生成新的tag-并推送到服务器上"></a>
 
 ### Create a tag and push it to the server
 
@@ -21,6 +25,8 @@ git push origin 0.0.6
 ```
 git push origin --tags
 ```
+
+<a name="文档生成"></a>
 
 ### Generate documentation
 
@@ -45,11 +51,15 @@ npm i ink-docstrap
 jsdoc -c .\configs\jsdoc.conf.json
 ```
 
+<a name="docsify-文档生成"></a>
+
 ### Generate docsify documentation
 
 - [Related blog post](https://segmentfault.com/a/1190000007656679?_ea=1416350)
 - [Generate JavaScript API documentation using JSDoc and Docstrap](https://lzw.me/a/jsdoc-docstrap-api.html)
 - [docsify documentation](https://docsify.js.org/#/zh-cn/quickstart)
+
+<a name="开发者文档"></a>
 
 ### Developer documentation
 
