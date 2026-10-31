@@ -7,3 +7,4 @@
 
 [GitHub](https://github.com/luoyunchong/staticfiles)
 [Get Started](#入门)
+[English](#/README.en)
