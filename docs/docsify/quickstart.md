@@ -1,3 +1,5 @@
+[English](quickstart.en.md) | **简体中文**
+
 
 # 整体架构说明
 
