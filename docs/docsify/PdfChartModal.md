@@ -1,3 +1,5 @@
+[English](PdfChartModal.en.md) | **简体中文**
+
 
 ### 2018-10-9
 
