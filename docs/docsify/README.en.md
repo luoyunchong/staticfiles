@@ -27,3 +27,4 @@ Or run this from the parent directory of docs:
 Finally, open  [http://localhost:3000](http://localhost:3000)
 
 * Related blog post [https://segmentfault.com/a/1190000007656679?_ea=1416350](https://segmentfault.com/a/1190000007656679?_ea=1416350)
+[Browse all English guides](sidebar.en.md).
